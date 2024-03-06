@@ -33,6 +33,9 @@ public class Game {
         return state;
     }
 
+    /**
+     * Disposes the game state and informs players that the game is being closed
+     */
     public void dispose() {
         if (player0 != null) {
             player0.dispose();
@@ -40,5 +43,16 @@ public class Game {
         if (player1 != null) {
             player1.dispose();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "state=" + state +
+                ", isVisible=" + isVisible +
+                ", gameCode='" + gameCode + '\'' +
+                ", player0=" + player0 +
+                ", player1=" + player1 +
+                '}';
     }
 }

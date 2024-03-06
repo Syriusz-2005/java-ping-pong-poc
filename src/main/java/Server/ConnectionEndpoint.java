@@ -57,7 +57,7 @@ public class ConnectionEndpoint {
         connectionEndpoints.add(this);
         var id = session.getId();
         try {
-            var user = new User(new UserConfig(id, username, session, lobby));
+            var user = new User(new UserConfig(id, username, session, lobby, this));
             users.put(id, user);
         } catch(InvalidDataException err) {
             close(err);
@@ -65,11 +65,7 @@ public class ConnectionEndpoint {
     }
 
     public void postMessage(MessageType msg) {
-        try {
-            session.getBasicRemote().sendObject(msg);
-        } catch (IOException | EncodeException e) {
-            System.out.println(e.getMessage());
-        }
+        session.getAsyncRemote().sendObject(msg);
     }
 
     @OnMessage
@@ -84,6 +80,9 @@ public class ConnectionEndpoint {
             }
             case CREATE_GAME -> {
                 ConnectionEndpoint.lobby.createGame(user);
+            }
+            case GAME_JOIN_REQUEST -> {
+                ConnectionEndpoint.lobby.joinGame(user, message.data.gameCode);
             }
         }
     }

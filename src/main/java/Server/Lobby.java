@@ -61,6 +61,15 @@ public class Lobby {
         return games;
     }
 
+    public Game findGame(String gameCode) {
+        for (var game : games) {
+            if (game.gameCode.equals(gameCode)) {
+                return game;
+            }
+        }
+        return null;
+    }
+
     public int closeAllGames() {
         int size = games.size();
         for (var game : games) {

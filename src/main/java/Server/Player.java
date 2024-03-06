@@ -12,4 +12,8 @@ public class Player {
     public void dispose() {
         user.setPlayer(null);
     }
+
+    public Game getGame() {
+        return game;
+    }
 }

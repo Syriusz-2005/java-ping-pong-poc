@@ -21,6 +21,10 @@ public class WebsocketClient {
             case TEST_CONNECTION -> {
                 Logger.printOk("Connection tested, everything works correctly");
             }
+            case GAME_JOIN -> {
+                Logger.printOk("Succesfully joined the game");
+                Logger.printOk("Game code: " + message.data.gameCode);
+            }
         }
     }
 }

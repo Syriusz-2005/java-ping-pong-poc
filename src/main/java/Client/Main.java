@@ -23,12 +23,17 @@ public class Main {
             session.getBasicRemote().sendObject(connectionMessage);
 
             var clientManager = new ClientManager(session);
-            var interpreter = new CommandInterpreter("Enter command:");
+            var interpreter = new CommandInterpreter("");
             interpreter.listen((arguments) -> {
                 var cmd = arguments[0];
                 switch (cmd) {
                     case "createGame" -> {
                         var msg = new MessageType().setCommand(CommandType.CREATE_GAME);
+                        clientManager.connectionManager.postMessage(msg);
+                    }
+                    case "join" -> {
+                        var msg = new MessageType().setCommand(CommandType.GAME_JOIN_REQUEST);
+                        msg.data.gameCode = arguments[1];
                         clientManager.connectionManager.postMessage(msg);
                     }
                     case "exit" -> {

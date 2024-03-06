@@ -22,7 +22,7 @@ public class Main {
         try {
             server.start();
             Logger.printOk("The server started and can process requests!");
-            var interpreter = new CommandInterpreter("Enter command:");
+            var interpreter = new CommandInterpreter("");
             interpreter.listen((arguments) -> {
                 switch (arguments[0]) {
                     case "exit" -> {
@@ -33,6 +33,15 @@ public class Main {
                         Logger.print("Removing all games...", LogLevel.REDUCED);
                         int gamesCount = serverLobby.closeAllGames();
                         Logger.print("Removed " + gamesCount + " games", LogLevel.REDUCED);
+                    }
+                    case "inspect" -> {
+                        String gameCode = arguments[1];
+                        var game = serverLobby.findGame(gameCode);
+                        if (game != null) {
+                            Logger.printErr("This game does not exist!");
+                            return true;
+                        }
+                        System.out.println(game);
                     }
                 }
                 return true;
