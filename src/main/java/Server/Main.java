@@ -37,8 +37,8 @@ public class Main {
                     case "inspect" -> {
                         String gameCode = arguments[1];
                         var game = serverLobby.findGame(gameCode);
-                        if (game != null) {
-                            Logger.printErr("This game does not exist!");
+                        if (game == null) {
+                            Logger.printErr("The game with code: " + gameCode + " does not exist!");
                             return true;
                         }
                         System.out.println(game);

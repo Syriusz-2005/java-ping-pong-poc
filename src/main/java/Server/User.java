@@ -16,9 +16,14 @@ public class User {
         this.endpoint = config.endpoint();
     }
 
+    public void postMessage(MessageType msg) {
+        endpoint.postMessage(msg);
+    }
+
     public void setPlayer(Player player) {
         if (player == null) {
             var msg = new MessageType().setCommand(CommandType.GAME_KICK);
+            msg.data.gameKick.reason = "Player is removed from the game";
             endpoint.postMessage(msg);
         } else {
             var msg = new MessageType().setCommand(CommandType.GAME_JOIN);

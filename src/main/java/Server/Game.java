@@ -1,5 +1,8 @@
 package Server;
 
+import Message.CommandType;
+import Message.MessageType;
+
 public class Game {
     private GameState state = GameState.WAITING_IN_LOBBY;
     public boolean isVisible = false;
@@ -31,6 +34,11 @@ public class Game {
 
     public GameState getState() {
         return state;
+    }
+
+    public void broadcast(MessageType msg) {
+        player0.postMessage(msg);
+        player1.postMessage(msg);
     }
 
     /**

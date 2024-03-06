@@ -1,5 +1,7 @@
 package Server;
 
+import Message.MessageType;
+
 public class Player {
     private final User user;
     private final Game game;
@@ -15,5 +17,13 @@ public class Player {
 
     public Game getGame() {
         return game;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void postMessage(MessageType msg) {
+        user.postMessage(msg);
     }
 }

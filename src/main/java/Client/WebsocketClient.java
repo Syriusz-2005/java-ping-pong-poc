@@ -25,6 +25,9 @@ public class WebsocketClient {
                 Logger.printOk("Succesfully joined the game");
                 Logger.printOk("Game code: " + message.data.gameCode);
             }
+            case GAME_KICK -> {
+                Logger.printErr("You've been kicked, reason: " + message.data.gameKick.reason);
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ public class Main {
             interpreter.listen((arguments) -> {
                 var cmd = arguments[0];
                 switch (cmd) {
-                    case "createGame" -> {
+                    case "create" -> {
                         var msg = new MessageType().setCommand(CommandType.CREATE_GAME);
                         clientManager.connectionManager.postMessage(msg);
                     }
