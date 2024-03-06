@@ -102,6 +102,17 @@ public class MutFVector3 implements Vector<Float> {
         x = x > 0 ? x - value : x + value;
         y = y > 0 ? y - value : y + value;
         z = z > 0 ? z - value : z + value;
+        return this;
+    }
+
+    public float distanceTo(MutFVector3 vec) {
+        MutFVector3 delta = subtract(vec);
+        return (float) Math.sqrt(Math.pow(delta.x, 2) + Math.pow(delta.y, 2) + Math.pow(delta.z, 2));
+    }
+
+    public float length() {
+        var pointZero = new MutFVector3();
+        return distanceTo(pointZero);
     }
 
     public float dot(MutFVector3 vec) {
