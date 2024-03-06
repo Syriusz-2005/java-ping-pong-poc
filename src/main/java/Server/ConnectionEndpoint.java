@@ -1,8 +1,11 @@
 package Server;
 
+import Message.CommandType;
 import Message.MessageDecoder;
 import Message.MessageEncoder;
 import Message.MessageType;
+import Utils.LogLevel;
+import Utils.Logger;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -61,16 +64,35 @@ public class ConnectionEndpoint {
         }
     }
 
+    public void postMessage(MessageType msg) {
+        try {
+            session.getBasicRemote().sendObject(msg);
+        } catch (IOException | EncodeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     @OnMessage
-    public void onMessage(MessageType message) {
-        System.out.println("Message received");
-        System.out.println(message);
+    public void onMessage(MessageType message) throws Exception {
+        Logger.print("Message received:", LogLevel.VERY_SPECIFIC);
+        Logger.print(message.toString(), LogLevel.VERY_SPECIFIC);
+        var user = users.get(session.getId());
+        switch (message.getCommand()) {
+            case TEST_CONNECTION -> {
+                var pongMessage = new MessageType().setCommand(CommandType.TEST_CONNECTION);
+                postMessage(pongMessage);
+            }
+            case CREATE_GAME -> {
+                ConnectionEndpoint.lobby.createGame(user);
+            }
+        }
     }
 
     @OnClose
     public void onClose(Session session) throws IOException {
         connectionEndpoints.remove(this);
     }
+
 
     public static void broadcast(MessageType msg) {
         connectionEndpoints.forEach(connectionEndpoint -> {

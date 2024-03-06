@@ -34,7 +34,11 @@ public class Game {
     }
 
     public void dispose() {
-        player0.dispose();
-        player1.dispose();
+        if (player0 != null) {
+            player0.dispose();
+        }
+        if (player1 != null) {
+            player1.dispose();
+        }
     }
 }

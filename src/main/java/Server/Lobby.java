@@ -1,19 +1,21 @@
 package Server;
 
 
+import Utils.LogLevel;
+import Utils.Logger;
 import Utils.RandomCode;
 
 import java.util.ArrayList;
 
 public class Lobby {
     private LobbyConfig config;
-    private final ArrayList<Game> games = new ArrayList<>();
+    private ArrayList<Game> games = new ArrayList<>();
 
     public Lobby(LobbyConfig config) {
         this.config = config;
     }
 
-    private void createGame(User creator) throws Exception {
+    public void createGame(User creator) throws Exception {
         if (games.size() >= config.maxGames()) {
             throw new Exception("Cannot create more games. Limit reached.");
         }
@@ -23,13 +25,14 @@ public class Lobby {
         creator.setPlayer(player);
         try {
             newGame.addPlayer(player);
+            games.add(newGame);
+            Logger.print("New game created, code: " + newGame.gameCode, LogLevel.SPECIFIC);
         } catch (Exception e) { // Not happening
             throw new RuntimeException(e);
         }
-        games.add(newGame);
     }
 
-    private boolean joinGame(User user, String gameCode) {
+    public boolean joinGame(User user, String gameCode) {
         return games
             .stream()
             .filter((g) -> g.gameCode.equals(gameCode) && g.getState() == GameState.WAITING_IN_LOBBY)
@@ -56,5 +59,14 @@ public class Lobby {
 
     public ArrayList<Game> getGames() {
         return games;
+    }
+
+    public int closeAllGames() {
+        int size = games.size();
+        for (var game : games) {
+            game.dispose();
+        }
+        games = new ArrayList<>();
+        return size;
     }
 }
