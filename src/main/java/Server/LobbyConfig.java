@@ -1,3 +1,3 @@
 package Server;
 
-public record LobbyConfig(int maxConnections) {}
+public record LobbyConfig(int maxConnections, int maxGames) {}

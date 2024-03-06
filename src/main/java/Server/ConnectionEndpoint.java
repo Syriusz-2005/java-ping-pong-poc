@@ -19,10 +19,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
         encoders = MessageEncoder.class
 )
 public class ConnectionEndpoint {
-
+    private static boolean acceptsConnections = false;
     private Session session;
-    private static Set<ConnectionEndpoint> connectionEndpoints = new CopyOnWriteArraySet<>();
-    private static HashMap<String, User> users = new HashMap<>();
+    private static final Set<ConnectionEndpoint> connectionEndpoints = new CopyOnWriteArraySet<>();
+    private static final HashMap<String, User> users = new HashMap<>();
+    private static Lobby lobby;
+
+    public static void initConnectionEndpoint(Lobby lobby) {
+        ConnectionEndpoint.lobby = lobby;
+    }
 
 
     private void close(InvalidDataException err) throws IOException {
@@ -36,18 +41,27 @@ public class ConnectionEndpoint {
         }, err.getMessage()));
     }
 
-
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+        if (!acceptsConnections) {
+            session.close();
+            return;
+        }
         this.session = session;
         connectionEndpoints.add(this);
         var id = session.getId();
         try {
-            var user = new User(new UserConfig(id, username));
+            var user = new User(new UserConfig(id, username, session, lobby));
             users.put(id, user);
         } catch(InvalidDataException err) {
             close(err);
         }
+    }
+
+    @OnMessage
+    public void onMessage(MessageType message) {
+        System.out.println("Message received");
+        System.out.println(message);
     }
 
     @OnClose
@@ -65,5 +79,9 @@ public class ConnectionEndpoint {
                 }
             }
         });
+    }
+
+    public static void setAcceptsConnections(boolean acceptsConnections) {
+        ConnectionEndpoint.acceptsConnections = acceptsConnections;
     }
 }

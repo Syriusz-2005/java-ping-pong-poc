@@ -1,3 +1,5 @@
 package Server;
 
-public record UserConfig(String id, String username) {}
+import jakarta.websocket.Session;
+
+public record UserConfig(String id, String username, Session session, Lobby lobby) {}

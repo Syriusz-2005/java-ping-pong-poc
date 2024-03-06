@@ -8,4 +8,11 @@ public class MessageType {
     public void setCommand(CommandType command) {
         this.command = command;
     }
+
+    @Override
+    public String toString() {
+        return "MessageType{" +
+                "command=" + command +
+                '}';
+    }
 }
