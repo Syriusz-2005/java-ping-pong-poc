@@ -1,12 +1,15 @@
 package Message;
 
-import Server.CommandType;
-
 public class MessageType {
     private CommandType command;
 
-    public void setCommand(CommandType command) {
+    public MessageType setCommand(CommandType command) {
         this.command = command;
+        return this;
+    }
+
+    public CommandType getCommand() {
+        return command;
     }
 
     @Override

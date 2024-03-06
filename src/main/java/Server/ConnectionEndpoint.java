@@ -6,6 +6,8 @@ import Message.MessageType;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 
 import java.io.IOException;
@@ -18,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
         decoders = MessageDecoder.class,
         encoders = MessageEncoder.class
 )
+@WebSocket
 public class ConnectionEndpoint {
     private static boolean acceptsConnections = false;
     private Session session;
