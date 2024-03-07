@@ -43,4 +43,8 @@ public class User {
     public Player getPlayer() {
         return player;
     }
+
+    public String getUsername() {
+        return config.username();
+    }
 }

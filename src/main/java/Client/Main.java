@@ -13,17 +13,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        var client = new WebsocketClient();
-        String username = "_Syriusz_";
         try {
+            var client = new WebsocketClient();
+            String username = "_Syriusz_";
             var uri = new URI("ws://localhost:8080/connect/" + username);
             Session session = ContainerProvider.getWebSocketContainer().connectToServer(client, uri);
+
+            var clientManager = new ClientManager(session);
+            client.setManager(clientManager);
+            var interpreter = new CommandInterpreter("");
+
             var connectionMessage = new MessageType();
             connectionMessage.setCommand(CommandType.TEST_CONNECTION);
             session.getBasicRemote().sendObject(connectionMessage);
 
-            var clientManager = new ClientManager(session);
-            var interpreter = new CommandInterpreter("");
             interpreter.listen((arguments) -> {
                 var cmd = arguments[0];
                 switch (cmd) {

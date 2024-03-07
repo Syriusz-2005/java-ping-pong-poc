@@ -11,4 +11,5 @@ public enum CommandType {
     GAME_PLAYER_DISCONNECTED,
     GAME_STATE_UPDATE,
     GAME_METADATA_UPDATE,
+    SCENE_UPDATE,
 }

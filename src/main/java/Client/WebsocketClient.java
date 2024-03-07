@@ -13,6 +13,8 @@ import jakarta.websocket.OnMessage;
         decoders = MessageDecoder.class
 )
 public class WebsocketClient {
+    private ClientManager manager;
+
     @OnMessage
     public void onMessage(MessageType message) {
         Logger.print("Client received message:", LogLevel.VERY_SPECIFIC);
@@ -28,6 +30,13 @@ public class WebsocketClient {
             case GAME_KICK -> {
                 Logger.printErr("You've been kicked, reason: " + message.data.gameKick.reason);
             }
+            case GAME_STATE_UPDATE -> {
+                manager.sceneManager.scene.applyCorrection(message.data.sceneDataUpdate.objects);
+            }
         }
+    }
+
+    public void setManager(ClientManager manager) {
+        this.manager = manager;
     }
 }

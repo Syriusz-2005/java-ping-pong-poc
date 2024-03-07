@@ -2,6 +2,7 @@ package Server;
 
 import Message.CommandType;
 import Message.MessageType;
+import Physics.Rectangle;
 import org.eclipse.jetty.util.Atomics;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,7 +21,7 @@ public class Game {
     private Player player0;
     private Player player1;
 
-    private final GameLoop gameLoop = new GameLoop(this, new GameLoopConfig(40, 2));
+    private final GameLoop gameLoop = new GameLoop(this, new GameLoopConfig(40, 2, 40 * 6));
 
     public Game(String gameCode) {
         this.gameCode = gameCode;
@@ -35,14 +36,27 @@ public class Game {
         }
     }
 
+    public void broadcastSceneState(Rectangle[] arr) {
+        var msg = new MessageType().setCommand(CommandType.SCENE_UPDATE);
+        msg.data.sceneDataUpdate.timestamp = System.currentTimeMillis();
+        msg.data.sceneDataUpdate.objects = arr;
+        broadcast(msg);
+    }
+
     public void broadcastMetadata() {
         var msg1 = new MessageType().setCommand(CommandType.GAME_METADATA_UPDATE);
         msg1.data.gameMetadataUpdate.yourUUID = player0.sceneObjectUUID;
+        if (player1 != null) {
+            msg1.data.gameMetadataUpdate.enemyUsername = player1.getUser().getUsername();
+        }
         player0.postMessage(msg1);
 
-        var msg2 = new MessageType().setCommand(CommandType.GAME_METADATA_UPDATE);
-        msg2.data.gameMetadataUpdate.yourUUID = player1.sceneObjectUUID;
-        player1.postMessage(msg2);
+        if (player1 != null) {
+            var msg2 = new MessageType().setCommand(CommandType.GAME_METADATA_UPDATE);
+            msg2.data.gameMetadataUpdate.yourUUID = player1.sceneObjectUUID;
+            msg2.data.gameMetadataUpdate.enemyUsername = player0.getUser().getUsername();
+            player1.postMessage(msg2);
+        }
     }
 
     public void addPlayer(Player p) throws Exception {

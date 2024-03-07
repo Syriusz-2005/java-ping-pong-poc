@@ -3,6 +3,7 @@ package Physics;
 import Vector.MutFVec2;
 
 public class Rectangle extends PhysicalObject {
+
     public float width;
     public float height;
     public Rectangle(float width, float height) {
@@ -19,5 +20,12 @@ public class Rectangle extends PhysicalObject {
         if (isImmovable || !canCollide) return;
 
         this.velocity = newVelocity;
+    }
+
+    public void updateFromRectangle(Rectangle rec) {
+        width = rec.width;
+        height = rec.height;
+        pos = new MutFVec2(rec.pos.getX(), rec.pos.getX());
+        velocity = new MutFVec2(rec.velocity.getX(), rec.velocity.getX());
     }
 }

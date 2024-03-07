@@ -10,23 +10,44 @@ import java.util.ArrayList;
  * Scene represents a place in which PhysicalObjects interfere with themselves
  */
 public class PhysicsScene {
+    public static PhysicsSceneConfig DEFAULT_SCENE_CONFIG = new PhysicsSceneConfig(0);
+
     private final PhysicsSceneConfig config;
-    private ArrayList<PhysicalObject> objects;
+    private final ArrayList<Rectangle> objects = new ArrayList<>();
 
     public PhysicsScene(PhysicsSceneConfig config) {
         this.config = config;
     }
 
-    public void add(PhysicalObject object) {
+    public void add(Rectangle object) {
         objects.add(object);
     }
 
-    public void remove(PhysicalObject object) {
+    public void remove(Rectangle object) {
         objects.remove(object);
     }
 
     public void removeAll() {
         objects.clear();
+    }
+
+    public void applyCorrection(Rectangle[] arr) {
+        outer: for (var rec : arr) {
+            for (var object : objects) {
+                if (rec.uuid.equals(object.uuid)) {
+                    object.updateFromRectangle(rec);
+                    continue outer;
+                }
+                // No matching object found: create new
+                Rectangle newRect = new Rectangle(0, 0);
+                newRect.updateFromRectangle(rec);
+                objects.add(newRect);
+            }
+        }
+    }
+
+    public ArrayList<Rectangle> getObjects() {
+        return this.objects;
     }
 
     private Rectangle getIntersection(Rectangle r1, Rectangle r2) {
@@ -86,7 +107,6 @@ public class PhysicsScene {
         if (object.canCollide || object.isImmovable) return;
         for (var pairedObject : objects) {
             if (pairedObject.canCollide) {
-                float distance = object.pos.distanceTo(pairedObject.pos);
                 var intersection = getIntersection(object, (Rectangle) pairedObject);
                 if (intersection != null) {
                     calculateCollisionResult(object, (Rectangle) pairedObject, intersection);
@@ -98,6 +118,7 @@ public class PhysicsScene {
     public void step(float stepLength) {
         for (var object : objects) {
             object.step(stepLength, config);
+            collisionDetect((Rectangle) object);
         }
     }
 

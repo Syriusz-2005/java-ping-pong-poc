@@ -1,5 +1,7 @@
 package Server;
 
+import Message.CommandType;
+import Message.MessageType;
 import Physics.PhysicsScene;
 import Physics.PhysicsSceneConfig;
 import Physics.Rectangle;
@@ -7,12 +9,16 @@ import Utils.LogLevel;
 import Utils.Logger;
 import Vector.MutFVec2;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class GameLoop extends Thread {
     private int stepIndex = 0;
+    private int preparingTicks = 0;
     private final Game game;
     private final GameLoopConfig config;
 
-    private final PhysicsScene scene = new PhysicsScene(new PhysicsSceneConfig(0));
+    private final PhysicsScene scene = new PhysicsScene(PhysicsScene.DEFAULT_SCENE_CONFIG);
 
     public GameLoop(Game game, GameLoopConfig config) {
         super();
@@ -54,7 +60,10 @@ public class GameLoop extends Thread {
     }
 
     private void processPacketStep() {
-
+        var objects = scene.getObjects();
+        Rectangle[] arr = new Rectangle[objects.size()];
+        objects.toArray(arr);
+        game.broadcastSceneState(arr);
     }
 
     private void processStep() {
@@ -65,9 +74,19 @@ public class GameLoop extends Thread {
             processLazyStep();
         }
 
+        if (gameState == GameState.PREPARING) {
+            preparingTicks++;
+            if (preparingTicks >= config.preparationTimeInTicks()) {
+                game.setState(GameState.SIMULATING);
+            }
+        }
+
         if (!(gameState == GameState.PREPARING || gameState == GameState.SIMULATING)) {
             return;
         }
+
+        float stepLength = 100f / config.simulationStepsPerSecond();
+        scene.step(stepLength);
 
         boolean isPacketStep = stepIndex % config.simulationStepsToPacketsRatio() == 0;
         if (isPacketStep) {
@@ -80,9 +99,9 @@ public class GameLoop extends Thread {
     public void run() {
         Logger.print("Started new game loop simulation thread", LogLevel.SPECIFIC);
         while (!game.isDisposed.get()) {
-            processStep();
             int stepsPerSecond = config.simulationStepsPerSecond();
             int sleepTime = 1000 / stepsPerSecond;
+            processStep();
 
             try {
                 sleep(sleepTime);
