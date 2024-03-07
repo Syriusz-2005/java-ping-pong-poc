@@ -39,6 +39,12 @@ public class MutFVec2 implements Vector<Float> {
         return this;
     }
 
+    public MutFVec2 set(MutFVec2 vec) {
+        x = vec.x;
+        y = vec.y;
+        return this;
+    }
+
     public MutFVec2 addX(float val) {
         x += val;
         return this;

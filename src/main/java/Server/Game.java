@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A class that abstracts the Played game. It is a state machine that determines in what stage the game is.
+ * A class that abstracts the Played game. It is a state machine that determines in what stage the game currently is.
  */
 public class Game {
     private volatile GameState state = GameState.WAITING_IN_LOBBY;
@@ -96,7 +96,7 @@ public class Game {
     /**
      * Automatically calls game.dispose() if necessary
      * @param p
-     * @return boolean indicating if the lobby should dispose the game
+     * @return boolean indicating if the lobby must remove the game from the list
      */
     public boolean removePlayer(Player p) {
         if (p == player0) {

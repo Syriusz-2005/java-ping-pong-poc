@@ -73,7 +73,7 @@ public class PhysicsScene {
     }
 
     /**
-     * Apply all forces that are result of a AABB collision
+     * Apply all forces that are a result of a AABB collision
      * @param r1
      * @param r2
      * @param i
@@ -99,10 +99,13 @@ public class PhysicsScene {
             r1.velocity.setY(rvy * r1Commitment);
             r2.velocity.setY(-rvy * r2Commitment);
         }
+        r1.pos.set(newPos1);
+        r2.pos.set(newPos2);
     }
 
     /**
-     * Performs collision detection using naive approach. Suitable for the situation
+     * Performs collision detection using naive approach. Suitable for scenes with low amount of objects
+     * TODO: Implement Continues collision detection for precise simulation
      * @param object
      */
     private void collisionDetect(Rectangle object) {

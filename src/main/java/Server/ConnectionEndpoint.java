@@ -65,7 +65,9 @@ public class ConnectionEndpoint {
     }
 
     public void postMessage(MessageType msg) {
-        session.getAsyncRemote().sendObject(msg);
+        try {
+            session.getAsyncRemote().sendObject(msg);
+        } catch(RuntimeException e) {}
     }
 
     @OnMessage
