@@ -5,7 +5,7 @@ import jakarta.websocket.EncodeException;
 import jakarta.websocket.Encoder;
 
 public class MessageEncoder implements Encoder.Text<MessageType> {
-    private static Gson gson = new Gson();
+    public static Gson gson = new Gson();
 
     @Override
     public String encode(MessageType message) throws EncodeException {

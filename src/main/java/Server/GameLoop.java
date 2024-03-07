@@ -81,17 +81,19 @@ public class GameLoop extends Thread {
             }
         }
 
-        if (!(gameState == GameState.PREPARING || gameState == GameState.SIMULATING)) {
-            return;
+        if (gameState == GameState.PREPARING || gameState == GameState.SIMULATING) {
+            float stepLength = 100f / config.simulationStepsPerSecond();
+            scene.step(stepLength);
+
+            // Reducing the amount of update packets during preparation stage
+            var simulationStepsToPacketSend = (config.simulationStepsToPacketsRatio()) + (gameState == GameState.PREPARING ? 10 : 0);
+
+            boolean isPacketStep = stepIndex % simulationStepsToPacketSend == 0;
+            if (isPacketStep) {
+                processPacketStep();
+            }
         }
 
-        float stepLength = 100f / config.simulationStepsPerSecond();
-        scene.step(stepLength);
-
-        boolean isPacketStep = stepIndex % config.simulationStepsToPacketsRatio() == 0;
-        if (isPacketStep) {
-            processPacketStep();
-        }
     }
 
 

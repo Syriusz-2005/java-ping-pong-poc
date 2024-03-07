@@ -3,6 +3,7 @@ package Client;
 import Message.MessageDecoder;
 import Message.MessageEncoder;
 import Message.MessageType;
+import Physics.Rectangle;
 import Utils.LogLevel;
 import Utils.Logger;
 import jakarta.websocket.ClientEndpoint;
@@ -31,7 +32,19 @@ public class WebsocketClient {
                 Logger.printErr("You've been kicked, reason: " + message.data.gameKick.reason);
             }
             case GAME_STATE_UPDATE -> {
-                manager.sceneManager.scene.applyCorrection(message.data.sceneDataUpdate.objects);
+                manager.setGameState(message.data.gameStateUpdate.newState);
+            }
+            case SCENE_UPDATE -> {
+                System.out.println(message.data.sceneDataUpdate);
+                if (message.data.sceneDataUpdate.objects != null) {
+                    var jsonArr = message.data.sceneDataUpdate.objects;
+                    Rectangle[] arr = new Rectangle[jsonArr.length];
+                    for (int i = 0; i < jsonArr.length; i++) {
+                        var object = MessageEncoder.gson.fromJson(jsonArr[i], Rectangle.class);
+                        arr[i] = object;
+                    }
+                    manager.sceneManager.scene.applyCorrection(arr);
+                }
             }
         }
     }

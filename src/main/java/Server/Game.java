@@ -1,10 +1,12 @@
 package Server;
 
 import Message.CommandType;
+import Message.MessageEncoder;
 import Message.MessageType;
 import Physics.Rectangle;
 import org.eclipse.jetty.util.Atomics;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,7 +41,11 @@ public class Game {
     public void broadcastSceneState(Rectangle[] arr) {
         var msg = new MessageType().setCommand(CommandType.SCENE_UPDATE);
         msg.data.sceneDataUpdate.timestamp = System.currentTimeMillis();
-        msg.data.sceneDataUpdate.objects = arr;
+        var encodedArray = new String[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            encodedArray[i] = MessageEncoder.gson.toJson(arr[i]);
+        }
+        msg.data.sceneDataUpdate.objects = encodedArray;
         broadcast(msg);
     }
 

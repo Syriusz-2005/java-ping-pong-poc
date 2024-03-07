@@ -4,6 +4,7 @@ import Vector.MutFVec2;
 import Vector.MutFVector3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Basic AABB Collision detection and physics engine
@@ -32,6 +33,7 @@ public class PhysicsScene {
     }
 
     public void applyCorrection(Rectangle[] arr) {
+        System.out.println(Arrays.toString(arr));
         outer: for (var rec : arr) {
             for (var object : objects) {
                 if (rec.uuid.equals(object.uuid)) {
