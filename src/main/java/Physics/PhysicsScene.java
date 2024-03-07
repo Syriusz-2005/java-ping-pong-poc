@@ -56,7 +56,6 @@ public class PhysicsScene {
         var startPos1 = r1.getCornerPos();
         var startPos2 = r2.getCornerPos();
 
-
         float x1 = Math.max(startPos1.getX(), startPos2.getX());
         float y1 = Math.max(startPos1.getY(), startPos2.getY());
 
