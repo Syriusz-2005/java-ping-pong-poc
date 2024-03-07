@@ -7,5 +7,7 @@ public enum CommandType {
 
 
     GAME_JOIN,
-    GAME_KICK
+    GAME_KICK,
+    GAME_PLAYER_DISCONNECTED,
+    GAME_STATE_UPDATE,
 }

@@ -3,6 +3,9 @@ package Server;
 import Message.CommandType;
 import Message.MessageType;
 
+/**
+ * A class that abstracts the Played game. It is a state machine that determines in what stage the game is.
+ */
 public class Game {
     private GameState state = GameState.WAITING_IN_LOBBY;
     public boolean isVisible = false;
@@ -13,6 +16,14 @@ public class Game {
 
     public Game(String gameCode) {
         this.gameCode = gameCode;
+    }
+    private void broadcast(MessageType msg) {
+        if (player0 != null) {
+            player0.postMessage(msg);
+        }
+        if (player1 != null) {
+            player1.postMessage(msg);
+        }
     }
 
     public void addPlayer(Player p) throws Exception {
@@ -29,6 +40,9 @@ public class Game {
     }
 
     public void setState(GameState state) {
+        var msg = new MessageType().setCommand(CommandType.GAME_STATE_UPDATE);
+        msg.data.gameStateUpdate.newState = state;
+        broadcast(msg);
         this.state = state;
     }
 
@@ -36,9 +50,22 @@ public class Game {
         return state;
     }
 
-    public void broadcast(MessageType msg) {
-        player0.postMessage(msg);
-        player1.postMessage(msg);
+    /**
+     *
+     * @param p
+     * @return boolean indicating if the lobby should dipose the game
+     */
+    public boolean removePlayer(Player p) {
+        if (p == player0) {
+            dispose();
+            return true;
+        } else {
+            player1 = null;
+            var msg = new MessageType().setCommand(CommandType.GAME_PLAYER_DISCONNECTED);
+            broadcast(msg);
+            setState(GameState.ENDED);
+            return false;
+        }
     }
 
     /**

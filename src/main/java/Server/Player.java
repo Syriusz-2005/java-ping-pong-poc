@@ -2,6 +2,9 @@ package Server;
 
 import Message.MessageType;
 
+/**
+ * Player is a User that is playing the game.
+ */
 public class Player {
     private final User user;
     private final Game game;

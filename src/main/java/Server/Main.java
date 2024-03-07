@@ -35,6 +35,14 @@ public class Main {
                         Logger.print("Removed " + gamesCount + " games", LogLevel.REDUCED);
                     }
                     case "inspect" -> {
+                        if (arguments.length < 2) {
+                            Logger.printOk("List of all games:");
+                            var games = serverLobby.getGames();
+                            for (var game : games) {
+                                System.out.println(game);
+                            }
+                            return true;
+                        }
                         String gameCode = arguments[1];
                         var game = serverLobby.findGame(gameCode);
                         if (game == null) {

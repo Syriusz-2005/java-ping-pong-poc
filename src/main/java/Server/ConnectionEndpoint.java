@@ -89,6 +89,8 @@ public class ConnectionEndpoint {
 
     @OnClose
     public void onClose(Session session) throws IOException {
+        var user = users.get(session.getId());
+        lobby.removeClosedConnection(user);
         connectionEndpoints.remove(this);
     }
 

@@ -3,6 +3,9 @@ package Server;
 import Message.CommandType;
 import Message.MessageType;
 
+/**
+ * User is an abstraction over session. It represents one entity that exist in the lobby and can create and join games.
+ */
 public class User {
     private final UserConfig config;
     private Player player;
@@ -35,5 +38,9 @@ public class User {
 
     public UserConfig getConfig() {
         return config;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

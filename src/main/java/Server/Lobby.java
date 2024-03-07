@@ -1,6 +1,8 @@
 package Server;
 
 
+import Message.CommandType;
+import Message.MessageType;
 import Utils.LogLevel;
 import Utils.Logger;
 import Utils.RandomCode;
@@ -77,5 +79,20 @@ public class Lobby {
         }
         games = new ArrayList<>();
         return size;
+    }
+
+    private void disposeGame(Game g) {
+        games.remove(g);
+    }
+
+    public void removeClosedConnection(User user) {
+        var player = user.getPlayer();
+        if (player != null) {
+            var game = player.getGame();
+            boolean shouldDispose = game.removePlayer(player);
+            if (shouldDispose) {
+                disposeGame(game);
+            };
+        }
     }
 }
