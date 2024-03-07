@@ -25,6 +25,10 @@ public class PhysicsScene {
         objects.remove(object);
     }
 
+    public void removeAll() {
+        objects.clear();
+    }
+
     private Rectangle getIntersection(Rectangle r1, Rectangle r2) {
         var startPos1 = r1.getCornerPos();
         var startPos2 = r2.getCornerPos();

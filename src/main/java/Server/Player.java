@@ -8,6 +8,7 @@ import Message.MessageType;
 public class Player {
     private final User user;
     private final Game game;
+    public volatile String sceneObjectUUID;
 
     public Player(User user, Game game) {
         this.user = user;

@@ -11,9 +11,7 @@ public class PhysicalObject {
     protected MutFVec2 pos = new MutFVec2();
     protected MutFVec2 velocity = new MutFVec2();
     /**
-     * Mass must be normalised
-     * 0 means no mass at all
-     * 1 means a large mass
+     * Mass of an object
      */
     protected float mass = .5f;
 

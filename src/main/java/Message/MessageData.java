@@ -5,4 +5,5 @@ public class MessageData {
 
     public GameKickMessageData gameKick = new GameKickMessageData();
     public GameStateUpdateMessageData gameStateUpdate = new GameStateUpdateMessageData();
+    public GameMetadataUpdateMessageData gameMetadataUpdate = new GameMetadataUpdateMessageData();
 }

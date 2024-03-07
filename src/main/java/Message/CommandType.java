@@ -10,4 +10,5 @@ public enum CommandType {
     GAME_KICK,
     GAME_PLAYER_DISCONNECTED,
     GAME_STATE_UPDATE,
+    GAME_METADATA_UPDATE,
 }
