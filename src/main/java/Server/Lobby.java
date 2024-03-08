@@ -19,7 +19,10 @@ public class Lobby {
 
     public void createGame(User creator) throws Exception {
         if (games.size() >= config.maxGames()) {
-            throw new Exception("Cannot create more games. Limit reached.");
+            throw new GameNotCreatedException("Cannot create more games. Limit reached.");
+        }
+        if (creator.getPlayer() != null) {
+            throw new GameNotCreatedException("Cannot create game. User is in other game");
         }
         String code = RandomCode.generateRandomCode(4, (result) -> games.stream().anyMatch((g) -> g.gameCode.equals(result)));
         var newGame = new Game(code);

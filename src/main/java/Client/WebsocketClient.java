@@ -4,6 +4,7 @@ import Message.MessageDecoder;
 import Message.MessageEncoder;
 import Message.MessageType;
 import Physics.Rectangle;
+import Server.GameState;
 import Utils.LogLevel;
 import Utils.Logger;
 import jakarta.websocket.ClientEndpoint;
@@ -25,8 +26,11 @@ public class WebsocketClient {
                 Logger.printOk("Connection tested, everything works correctly");
             }
             case GAME_JOIN -> {
+                var gameCode = message.data.gameCode;
                 Logger.printOk("Successfully joined the game");
-                Logger.printOk("Game code: " + message.data.gameCode);
+                Logger.printOk("Game code: " + gameCode);
+                manager.setGameCode(gameCode);
+                manager.setGameState(GameState.WAITING_IN_LOBBY);
             }
             case GAME_KICK -> {
                 Logger.printErr("You've been kicked, reason: " + message.data.gameKick.reason);

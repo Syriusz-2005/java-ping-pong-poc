@@ -9,7 +9,6 @@ import Utils.Logger;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 
@@ -81,7 +80,9 @@ public class ConnectionEndpoint {
                 postMessage(pongMessage);
             }
             case CREATE_GAME -> {
-                ConnectionEndpoint.lobby.createGame(user);
+                try {
+                    ConnectionEndpoint.lobby.createGame(user);
+                } catch (GameNotCreatedException ignored) {}
             }
             case GAME_JOIN_REQUEST -> {
                 ConnectionEndpoint.lobby.joinGame(user, message.data.gameCode);
