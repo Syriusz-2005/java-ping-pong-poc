@@ -20,11 +20,9 @@ public class WindowRenderer extends JFrame {
         setSize((int) size * 2, (int) size);
     }
 
-    public Graphics displayPreparingMenu() {
+    public void displayPreparingMenu() {
         System.out.println("Changing to preparing menu");
-        Graphics g = getGraphics();
         waitingFrameMenu.setVisible(false);
-        return g;
     }
 
     public void displayWaitingMenu() {

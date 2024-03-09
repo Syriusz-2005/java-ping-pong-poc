@@ -2,17 +2,17 @@ package Client;
 
 import Message.CommandType;
 import Message.MessageType;
+import Renderer.GameSceneRenderer;
 import Renderer.WindowRenderer;
 import Server.GameState;
 import jakarta.websocket.Session;
-
-import java.awt.*;
 
 public class ClientManager {
     public final ConnectionManager connectionManager;
     public final SceneManager sceneManager = new SceneManager();
 
-    public final WindowRenderer renderer = new WindowRenderer(this);
+    public final WindowRenderer windowRenderer = new WindowRenderer(this);
+    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer();
     private GameState gameState;
     private String gameCode;
 
@@ -29,10 +29,10 @@ public class ClientManager {
         System.out.print("New state: ");
         System.out.println(gameState);
         if (gameState == GameState.WAITING_IN_LOBBY) {
-            renderer.displayWaitingMenu();
+            windowRenderer.displayWaitingMenu();
         } else if (gameState == GameState.PREPARING) {
-            Graphics g = renderer.displayPreparingMenu();
-
+            windowRenderer.displayPreparingMenu();
+            sceneRenderer.start();
         }
     }
 
