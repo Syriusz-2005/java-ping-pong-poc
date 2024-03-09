@@ -10,7 +10,7 @@ public class WindowRenderer extends JFrame {
     private JPanel waitingFrameMenu;
 
     public WindowRenderer(ClientManager manager) {
-        super("Scene renderer");
+        super("Ping Pong lobby");
         this.manager = manager;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         displayJoinMenu();

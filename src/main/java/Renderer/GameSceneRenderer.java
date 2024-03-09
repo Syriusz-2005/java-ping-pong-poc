@@ -1,6 +1,7 @@
 package Renderer;
 import Physics.PhysicsScene;
 import Physics.Rectangle;
+import Server.GameLoop;
 import Vector.MutFVec2;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -54,19 +55,23 @@ public class GameSceneRenderer extends Thread {
         glfwShowWindow(window);
     }
 
-    private void render(ArrayList<Rectangle> objects) {
-        var viewport = new MutFVec2(width, height);
+    private MutFVec2 convertVec(MutFVec2 vec) {
+        return vec.multiplyScalar(2f).subtractScalar(1f);
+    }
 
-        glColor3f(1f, 1f, 1f);
+    private void render(ArrayList<Rectangle> objects) {
+        var viewport = new MutFVec2(GameLoop.SCENE_WIDTH, GameLoop.SCENE_HEIGHT);
+
         for (var object : objects) {
-            var topLeft = object.getCornerPos().divide(viewport).subtractScalar(-.5f);
-            var topRight = object.getCornerPos().addX(object.width).divide(viewport).subtractScalar(-.5f);
-            var bottomLeft = object.getCornerPos().addY(object.height).divide(viewport).subtractScalar(-.5f);
-            var bottomRight = object.getCornerPos().addY(object.height).addX(object.width).divide(viewport).subtractScalar(-.5f);
-//            System.out.println(topLeft);
-//            System.out.println(topRight);
-//            System.out.println(bottomLeft);
-//            System.out.println(bottomRight);
+            switch (object.getName()) {
+                case "player0" -> glColor3f(1f, 1f, 0f);
+                case "ceiling" -> glColor3f(0f, 0f, 1f);
+                default -> glColor3f(1f, 1f, 1f);
+            }
+            var topLeft = convertVec(object.getCornerPos().divide(viewport));
+            var topRight = convertVec(object.getCornerPos().addX(object.width).divide(viewport));
+            var bottomLeft = convertVec(object.getCornerPos().addY(-object.height).divide(viewport));
+            var bottomRight = convertVec(object.getCornerPos().addY(-object.height).addX(object.width).divide(viewport));
 
             float[] verticies = {
                     topLeft.getX(), topLeft.getY(),
@@ -91,7 +96,7 @@ public class GameSceneRenderer extends Thread {
     private void loop() {
         GL.createCapabilities();
 
-        glClearColor(0f, 0f, .6f, 1f);
+        glClearColor(0f, 0f, 0f, 1f);
         glLineWidth(2.8f);
         while (!glfwWindowShouldClose(window)) {
             var before = System.currentTimeMillis();

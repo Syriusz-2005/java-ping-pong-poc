@@ -88,6 +88,16 @@ public class MutFVec2 implements Vector<Float> {
         return this;
     }
 
+    public MutFVec2 mulX(float s) {
+        x *= s;
+        return this;
+    }
+
+    public MutFVec2 mulY(float s) {
+        y *= s;
+        return this;
+    }
+
     public MutFVec2 multiply(MutFVec2 vec) {
         x *= vec.x;
         y *= vec.y;
@@ -119,6 +129,12 @@ public class MutFVec2 implements Vector<Float> {
 
     public float dot(MutFVec2 vec) {
         return x * vec.x + y * vec.y;
+    }
+
+    public MutFVec2 invert() {
+        x = -x;
+        y = -y;
+        return this;
     }
 
     @Override

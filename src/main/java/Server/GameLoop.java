@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class GameLoop extends Thread {
+    public static float SCENE_WIDTH = 1600;
+    public static float SCENE_HEIGHT = 800;
+
     private int stepIndex = 0;
     private int preparingTicks = 0;
     private final Game game;
@@ -33,24 +36,24 @@ public class GameLoop extends Thread {
     public void initializeScene() {
         dispose();
 
-        float sceneWidth = 1600;
-        float sceneHeight = 800;
+        float sceneWidth = SCENE_WIDTH;
+        float sceneHeight = SCENE_HEIGHT;
 
-        var player0Palette = new Rectangle(30, 120);
+        var player0Palette = new Rectangle(30, 120, "player0");
         player0Palette.isImmovable = true;
         player0Palette.setPos(new MutFVec2(20, sceneHeight / 2));
 
-        var player1Palette = new Rectangle(30, 120);
+        var player1Palette = new Rectangle(30, 120, "player1");
         player1Palette.isImmovable = true;
         player1Palette.setPos(new MutFVec2(sceneWidth - 20, sceneHeight / 2));
 
         scene.add(player0Palette);
         scene.add(player1Palette);
 
-        var ceiling = new Rectangle(sceneWidth, sceneHeight);
-        ceiling.setPos(new MutFVec2(sceneWidth / 2,-sceneHeight / 2));
-        var floor = new Rectangle(sceneWidth, sceneHeight);
-        floor.setPos(new MutFVec2(sceneWidth / 2,sceneHeight * 1.5f));
+        var ceiling = new Rectangle(sceneWidth, sceneHeight, "ceiling");
+        ceiling.setPos(new MutFVec2(sceneWidth / 2,sceneHeight * 1.5f));
+        var floor = new Rectangle(sceneWidth, sceneHeight, "floor");
+        floor.setPos(new MutFVec2(sceneWidth / 2,-sceneHeight / 2));
         scene.add(ceiling);
         scene.add(floor);
     }

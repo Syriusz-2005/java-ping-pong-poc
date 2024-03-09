@@ -14,9 +14,11 @@ public class PhysicalObject {
      * Mass of an object
      */
     protected float mass = .5f;
+    private String name;
 
-    public PhysicalObject() {
+    public PhysicalObject(String name) {
         this.uuid = UUID.randomUUID().toString();
+        this.name = name;
     }
 
     public PhysicalObject setMass(float newMass) throws OutOfBoundsException {
@@ -39,6 +41,14 @@ public class PhysicalObject {
 
     public MutFVec2 getPos() {
         return pos;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setVelocity(MutFVec2 velocity) {
+        this.velocity = velocity;
     }
 
     public void step(float stepSize, PhysicsSceneConfig config) {

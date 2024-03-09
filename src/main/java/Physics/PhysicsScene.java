@@ -62,7 +62,7 @@ public class PhysicsScene {
         float y2 = Math.min(startPos1.getY() + r1.height, startPos2.getY() + r2.height);
 
         if (x2 - x1 > 0 && y2 - y1 > 0) {
-            var collision = new Rectangle(x2 - x1, y2 - y1);
+            var collision = new Rectangle(x2 - x1, y2 - y1, null);
             collision.pos.setX(x1).setY(y1);
             return collision;
         }
