@@ -62,6 +62,16 @@ public class Main {
                         game.getGameLoop().logState();
                     }
 
+                    case "reinit" -> {
+                        String gameCode = arguments[1];
+                        var game = serverLobby.findGame(gameCode);
+                        if (game == null) {
+                            Logger.printErr("The game with code: " + gameCode + " does not exist!");
+                            return true;
+                        }
+                        game.getGameLoop().reinit();
+                    }
+
                     case "moveAllObjects" -> {
                         String gameCode = arguments[1];
                         var game = serverLobby.findGame(gameCode);

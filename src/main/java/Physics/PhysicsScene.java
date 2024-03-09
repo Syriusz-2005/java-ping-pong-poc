@@ -51,18 +51,27 @@ public class PhysicsScene {
         return this.objects;
     }
 
+    /**
+     * Finds the intersection box if it exists
+     * @param r1
+     * @param r2
+     * @return Rectangle or null
+     */
     private Rectangle getIntersection(Rectangle r1, Rectangle r2) {
-        var startPos1 = r1.getCornerPos();
-        var startPos2 = r2.getCornerPos();
+        var topLeft1 = r1.getCornerPos();
+        var topLeft2 = r2.getCornerPos();
 
-        float x1 = Math.max(startPos1.getX(), startPos2.getX());
-        float y1 = Math.max(startPos1.getY(), startPos2.getY());
+        var bottomRight1 = r1.getBottomRight();
+        var bottomRight2 = r2.getBottomRight();
 
-        float x2 = Math.min(startPos1.getX() + r1.width, startPos2.getX() + r2.width);
-        float y2 = Math.min(startPos1.getY() + r1.height, startPos2.getY() + r2.height);
+        float x1 = Math.max(topLeft1.getX(), topLeft2.getX());
+        float y1 = Math.min(topLeft1.getY(), topLeft2.getY());
 
-        if (x2 - x1 > 0 && y2 - y1 > 0) {
-            var collision = new Rectangle(x2 - x1, y2 - y1, null);
+        float x2 = Math.min(bottomRight1.getX(), bottomRight2.getX());
+        float y2 = Math.max(bottomRight1.getY(), bottomRight2.getY());
+
+        if (x2 - x1 > 0 && y2 - y1 < 0) {
+            var collision = new Rectangle(x2 - x1, y1 - y2, null);
             collision.pos.setX(x1).setY(y1);
             return collision;
         }
@@ -83,19 +92,19 @@ public class PhysicsScene {
         float r2Commitment = 1 - r1Commitment;
         MutFVec2 iCorner = i.getCornerPos();
         if (i.width < i.height) {
-            var rvx = ((r1.pos.getX() + r2.pos.getX()) / 2);
+            var rvx = (r1.velocity.getX() + r2.velocity.getX());
             float direction = iCorner.getX() < r1.pos.getX() ? 1 : -1;
             newPos1.addX((float) i.width * direction * r1Commitment);
-            newPos2.addX((float) i.width * (-direction) * r2Commitment);
-            r1.velocity.setX(rvx * r1Commitment);
-            r2.velocity.setX(-rvx * r2Commitment);
+            newPos2.addX((float) i.width * direction * r2Commitment);
+            r1.velocity.setX(-rvx * r1Commitment);
+            r2.velocity.setX(rvx * r2Commitment);
         } else {
-            var rvy = ((r1.pos.getY() + r2.pos.getY()) / 2);
+            var rvy = (r1.velocity.getY() + r2.velocity.getY());
             float direction = iCorner.getY() < r1.pos.getY() ? 1 : -1;
-            newPos1.addY((float) i.height * direction * r1Commitment);
-            newPos2.addY((float) i.height * (-direction) * r2Commitment);
-            r1.velocity.setY(rvy * r1Commitment);
-            r2.velocity.setY(-rvy * r2Commitment);
+            newPos1.addY((float) i.height * r1Commitment * direction);
+            newPos2.addY((float) i.height * r2Commitment * direction);
+            r1.velocity.setY(-rvy * r1Commitment);
+            r2.velocity.setY(rvy * r2Commitment);
         }
         r1.pos.set(newPos1);
         r2.pos.set(newPos2);
@@ -107,12 +116,16 @@ public class PhysicsScene {
      * @param object
      */
     private void collisionDetect(Rectangle object) {
-        if (object.canCollide || object.isImmovable) return;
+        if (!object.canCollide || object.isImmovable) return;
         for (var pairedObject : objects) {
-            if (pairedObject.canCollide) {
-                var intersection = getIntersection(object, (Rectangle) pairedObject);
+            if (pairedObject.canCollide && object != pairedObject) {
+                var intersection = getIntersection(object, pairedObject);
                 if (intersection != null) {
-                    calculateCollisionResult(object, (Rectangle) pairedObject, intersection);
+                    System.out.println("Collision detected!");
+                    System.out.println(object);
+                    System.out.println(pairedObject);
+                    System.out.println("\n");
+                    calculateCollisionResult(object, pairedObject, intersection);
                 }
             }
         }
@@ -121,7 +134,7 @@ public class PhysicsScene {
     public void step(float stepLength) {
         for (var object : objects) {
             object.step(stepLength, config);
-//            collisionDetect((Rectangle) object);
+            collisionDetect(object);
         }
     }
 

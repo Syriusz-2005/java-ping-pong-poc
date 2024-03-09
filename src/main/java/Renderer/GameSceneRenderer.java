@@ -73,7 +73,7 @@ public class GameSceneRenderer extends Thread {
             var bottomLeft = convertVec(object.getCornerPos().addY(-object.height).divide(viewport));
             var bottomRight = convertVec(object.getCornerPos().addY(-object.height).addX(object.width).divide(viewport));
 
-            float[] verticies = {
+            float[] vertices = {
                     topLeft.getX(), topLeft.getY(),
                     topRight.getX(), topRight.getY(),
                     bottomLeft.getX(), bottomLeft.getY(),
@@ -82,8 +82,8 @@ public class GameSceneRenderer extends Thread {
                     bottomLeft.getX(), bottomLeft.getY(),
                     bottomRight.getX(), bottomRight.getY(),
             };
-            int[] indicies = {0, 1, 2, 3, 4, 5, 6};
-            var mesh = MeshLoader.createMesh(verticies, indicies);
+            int[] indices = {0, 1, 2, 3, 4, 5, 6};
+            var mesh = MeshLoader.createMesh(vertices, indices);
 
             GL30.glBindVertexArray(mesh.getVaoID());
             GL20.glEnableVertexAttribArray(0);
@@ -99,20 +99,20 @@ public class GameSceneRenderer extends Thread {
         glClearColor(0f, 0f, 0f, 1f);
         glLineWidth(2.8f);
         while (!glfwWindowShouldClose(window)) {
-            var before = System.currentTimeMillis();
             var objects = scene.getObjects();
-            synchronized (objects) {
-                glViewport(0, 0, width, height);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                render(objects);
+            glViewport(0, 0, width, height);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                glfwSwapBuffers(window);
-                glfwPollEvents();
-            }
+            var before = System.currentTimeMillis();
+            render(objects);
             var now = System.currentTimeMillis();
             var delta = now - before;
 //            System.out.println("Frame time: " + delta + "ms");
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+
         }
     }
 

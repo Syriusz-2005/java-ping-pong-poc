@@ -23,6 +23,11 @@ public class GameLoop extends Thread {
 
     private final PhysicsScene scene = new PhysicsScene(PhysicsScene.DEFAULT_SCENE_CONFIG);
 
+    private Rectangle ceiling;
+    private Rectangle player0Palette;
+    private Rectangle ball;
+
+
     public GameLoop(Game game, GameLoopConfig config) {
         super();
         this.game = game;
@@ -39,7 +44,7 @@ public class GameLoop extends Thread {
         float sceneWidth = SCENE_WIDTH;
         float sceneHeight = SCENE_HEIGHT;
 
-        var player0Palette = new Rectangle(30, 120, "player0");
+        player0Palette = new Rectangle(30, 120, "player0");
         player0Palette.isImmovable = true;
         player0Palette.setPos(new MutFVec2(20, sceneHeight / 2));
 
@@ -50,12 +55,27 @@ public class GameLoop extends Thread {
         scene.add(player0Palette);
         scene.add(player1Palette);
 
-        var ceiling = new Rectangle(sceneWidth, sceneHeight, "ceiling");
+        ceiling = new Rectangle(sceneWidth, sceneHeight, "ceiling");
         ceiling.setPos(new MutFVec2(sceneWidth / 2,sceneHeight * 1.5f));
+        ceiling.isImmovable = true;
+
         var floor = new Rectangle(sceneWidth, sceneHeight, "floor");
         floor.setPos(new MutFVec2(sceneWidth / 2,-sceneHeight / 2));
+        floor.isImmovable = true;
+
         scene.add(ceiling);
         scene.add(floor);
+
+        ball = new Rectangle(40, 40, "ball");
+        ball.getPos().setX(sceneWidth / 2).setY(sceneHeight / 2);
+        scene.add(ball);
+    }
+
+    /**
+     * Run when the game enters simulation stage.
+     */
+    private void initializeSimulation() {
+        ball.getVelocity().setX(4);
     }
 
     private void processLazyStep() {
@@ -81,6 +101,7 @@ public class GameLoop extends Thread {
             preparingTicks++;
             if (preparingTicks >= config.preparationTimeInTicks()) {
                 game.setState(GameState.SIMULATING);
+                initializeSimulation();
             }
         }
 
@@ -126,5 +147,11 @@ public class GameLoop extends Thread {
         for (var o : scene.getObjects()) {
             o.getPos().add(vec);
         }
+    }
+
+    public void reinit() {
+        scene.removeAll();
+        initializeScene();
+        initializeSimulation();
     }
 }

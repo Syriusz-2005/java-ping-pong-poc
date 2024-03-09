@@ -16,6 +16,10 @@ public class Rectangle extends PhysicalObject {
         return new MutFVec2(pos.cloneVec().subtract(new MutFVec2(width / 2, -height / 2)));
     }
 
+    public MutFVec2 getBottomRight() {
+        return getCornerPos().addX(width).addY(-height);
+    }
+
     public void applyCollisionForces(MutFVec2 newVelocity) {
         if (isImmovable || !canCollide) return;
 

@@ -51,6 +51,10 @@ public class PhysicalObject {
         this.velocity = velocity;
     }
 
+    public MutFVec2 getVelocity() {
+        return velocity;
+    }
+
     public void step(float stepSize, PhysicsSceneConfig config) {
         float friction = overridesAirFriction ? airFrictionOverride : config.globalAirFriction();
         velocity.subtractLength(friction * stepSize);
@@ -64,11 +68,10 @@ public class PhysicalObject {
                 "uuid='" + uuid + '\'' +
                 ", pos=" + pos +
                 ", velocity=" + velocity +
+                ", name=" + name +
                 ", mass=" + mass +
                 ", canCollide=" + canCollide +
                 ", isImmovable=" + isImmovable +
-                ", overridesAirFriction=" + overridesAirFriction +
-                ", airFrictionOverride=" + airFrictionOverride +
                 '}';
     }
 }
