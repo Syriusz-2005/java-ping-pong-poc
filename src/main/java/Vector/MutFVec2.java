@@ -95,6 +95,12 @@ public class MutFVec2 implements Vector<Float> {
         return this;
     }
 
+    public MutFVec2 divide(MutFVec2 vec) {
+        x /= vec.x;
+        y /= vec.y;
+        return this;
+    }
+
     public MutFVec2 subtractLength(float value) {
         x = x > 0 ? x - value : x + value;
         y = y > 0 ? y - value : y + value;
@@ -126,5 +132,13 @@ public class MutFVec2 implements Vector<Float> {
         list.add(x);
         list.add(y);
         return list;
+    }
+
+    @Override
+    public String toString() {
+        return "MutFVec2{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

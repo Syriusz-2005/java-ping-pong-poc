@@ -3,6 +3,7 @@ package Server;
 import Utils.CommandInterpreter;
 import Utils.LogLevel;
 import Utils.Logger;
+import Vector.MutFVec2;
 import org.glassfish.tyrus.server.Server;
 
 import java.util.Scanner;
@@ -50,6 +51,25 @@ public class Main {
                             return true;
                         }
                         System.out.println(game);
+                    }
+                    case "inspectScene" -> {
+                        String gameCode = arguments[1];
+                        var game = serverLobby.findGame(gameCode);
+                        if (game == null) {
+                            Logger.printErr("The game with code: " + gameCode + " does not exist!");
+                            return true;
+                        }
+                        game.getGameLoop().logState();
+                    }
+
+                    case "moveAllObjects" -> {
+                        String gameCode = arguments[1];
+                        var game = serverLobby.findGame(gameCode);
+                        if (game == null) {
+                            Logger.printErr("The game with code: " + gameCode + " does not exist!");
+                            return true;
+                        }
+                        game.getGameLoop().moveAllObjects(new MutFVec2(100, 100));
                     }
                 }
                 return true;

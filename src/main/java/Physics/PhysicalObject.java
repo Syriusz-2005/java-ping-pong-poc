@@ -37,10 +37,15 @@ public class PhysicalObject {
         this.pos = pos;
     }
 
+    public MutFVec2 getPos() {
+        return pos;
+    }
+
     public void step(float stepSize, PhysicsSceneConfig config) {
         float friction = overridesAirFriction ? airFrictionOverride : config.globalAirFriction();
         velocity.subtractLength(friction * stepSize);
-        pos.add(velocity.cloneVec().multiplyScalar(stepSize));
+        var posDelta = velocity.cloneVec().multiplyScalar(stepSize);
+        pos.add(posDelta);
     }
 
     @Override

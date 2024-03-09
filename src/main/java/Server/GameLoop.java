@@ -112,4 +112,16 @@ public class GameLoop extends Thread {
             }
         }
     }
+
+    public void logState() {
+        var objects = scene.getObjects();
+        for (var o : objects) {
+            System.out.println(o);
+        }
+    }
+    public void moveAllObjects(MutFVec2 vec) {
+        for (var o : scene.getObjects()) {
+            o.getPos().add(vec);
+        }
+    }
 }

@@ -1,11 +1,16 @@
 package Renderer;
 import Physics.PhysicsScene;
+import Physics.Rectangle;
+import Vector.MutFVec2;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -34,7 +39,7 @@ public class GameSceneRenderer extends Thread {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_SAMPLES, 4);
 
-        window = glfwCreateWindow(width, height, "Polygon Demo", NULL, NULL);
+        window = glfwCreateWindow(width, height, "Ping pong game", NULL, NULL);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(window, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
@@ -49,53 +54,60 @@ public class GameSceneRenderer extends Thread {
         glfwShowWindow(window);
     }
 
-    private void render() {
-        var objects = scene.getObjects();
-        synchronized (objects) {
-            System.out.print(" " + objects.size());
+    private void render(ArrayList<Rectangle> objects) {
+        var viewport = new MutFVec2(width, height);
 
-            glColor3f(1f, 1f, 1f);
-            for (var object : objects) {
-                var topLeft = object.getCornerPos();
-                var topRight = object.getCornerPos().cloneVec().addX(object.width);
-                var bottomLeft = object.getCornerPos().cloneVec().addY(object.height);
-                var bottomRight = object.getCornerPos().cloneVec().addY(object.height).addX(object.width);
+        glColor3f(1f, 1f, 1f);
+        for (var object : objects) {
+            var topLeft = object.getCornerPos().divide(viewport).subtractScalar(-.5f);
+            var topRight = object.getCornerPos().addX(object.width).divide(viewport).subtractScalar(-.5f);
+            var bottomLeft = object.getCornerPos().addY(object.height).divide(viewport).subtractScalar(-.5f);
+            var bottomRight = object.getCornerPos().addY(object.height).addX(object.width).divide(viewport).subtractScalar(-.5f);
+//            System.out.println(topLeft);
+//            System.out.println(topRight);
+//            System.out.println(bottomLeft);
+//            System.out.println(bottomRight);
 
-                glBegin(GL_LINE_STRIP);
+            float[] verticies = {
+                    topLeft.getX(), topLeft.getY(),
+                    topRight.getX(), topRight.getY(),
+                    bottomLeft.getX(), bottomLeft.getY(),
 
-                glVertex2f(topLeft.getX(), topLeft.getY());
-                glVertex2f(topRight.getX(), topRight.getY());
-                glVertex2f(bottomLeft.getX(), bottomLeft.getY());
+                    topRight.getX(), topRight.getY(),
+                    bottomLeft.getX(), bottomLeft.getY(),
+                    bottomRight.getX(), bottomRight.getY(),
+            };
+            int[] indicies = {0, 1, 2, 3, 4, 5, 6};
+            var mesh = MeshLoader.createMesh(verticies, indicies);
 
-                glVertex2f(topRight.getX(), topRight.getY());
-                glVertex2f(bottomLeft.getX(), bottomLeft.getY());
-                glVertex2f(bottomRight.getX(), bottomRight.getY());
-
-                glEnd();
-            }
+            GL30.glBindVertexArray(mesh.getVaoID());
+            GL20.glEnableVertexAttribArray(0);
+            glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT,0);
+            GL20.glDisableVertexAttribArray(0);
+            GL30.glBindVertexArray(0);
         }
     }
 
     private void loop() {
         GL.createCapabilities();
 
-        glClearColor(0f, 0f, 0f, 1f);
-        glLineWidth(1.8f);
-
+        glClearColor(0f, 0f, .6f, 1f);
+        glLineWidth(2.8f);
         while (!glfwWindowShouldClose(window)) {
-            glViewport(0, 0, width, height);
-            glClear(GL_COLOR_BUFFER_BIT);
+            var before = System.currentTimeMillis();
+            var objects = scene.getObjects();
+            synchronized (objects) {
+                glViewport(0, 0, width, height);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(0, width, height, 0, -1, 1);
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
+                render(objects);
 
-            render();
-
-            glfwSwapBuffers(window);
-            glfwPollEvents();
+                glfwSwapBuffers(window);
+                glfwPollEvents();
+            }
+            var now = System.currentTimeMillis();
+            var delta = now - before;
+//            System.out.println("Frame time: " + delta + "ms");
         }
     }
 

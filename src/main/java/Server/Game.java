@@ -126,6 +126,10 @@ public class Game {
         }
     }
 
+    public GameLoop getGameLoop() {
+        return gameLoop;
+    }
+
     @Override
     public String toString() {
         return "Game{" +

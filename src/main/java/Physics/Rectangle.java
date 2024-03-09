@@ -13,7 +13,7 @@ public class Rectangle extends PhysicalObject {
     }
 
     public MutFVec2 getCornerPos() {
-        return new MutFVec2(pos.subtract(new MutFVec2(width / 2, height / 2)));
+        return new MutFVec2(pos.cloneVec().subtract(new MutFVec2(width / 2, height / 2)));
     }
 
     public void applyCollisionForces(MutFVec2 newVelocity) {

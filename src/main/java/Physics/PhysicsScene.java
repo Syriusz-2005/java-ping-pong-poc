@@ -121,7 +121,7 @@ public class PhysicsScene {
     public void step(float stepLength) {
         for (var object : objects) {
             object.step(stepLength, config);
-            collisionDetect((Rectangle) object);
+//            collisionDetect((Rectangle) object);
         }
     }
 
