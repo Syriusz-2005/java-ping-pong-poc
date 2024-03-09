@@ -7,6 +7,7 @@ import java.awt.*;
 public class WindowRenderer extends JFrame {
     private final ClientManager manager;
     private JPanel lobbyFrame;
+    private JPanel waitingFrameMenu;
 
     public WindowRenderer(ClientManager manager) {
         super("Scene renderer");
@@ -19,19 +20,21 @@ public class WindowRenderer extends JFrame {
         setSize((int) size * 2, (int) size);
     }
 
-    public void displayLobbyMenu() {
+    public Graphics displayPreparingMenu() {
+        System.out.println("Changing to preparing menu");
+        Graphics g = getGraphics();
+        waitingFrameMenu.setVisible(false);
+        return g;
+    }
+
+    public void displayWaitingMenu() {
         String gameCode = manager.getGameCode();
         lobbyFrame.setVisible(false);
-        System.out.println("Changing to lobby menu");
+        System.out.println("Changing to waiting menu");
         var gameCodePanel = new JPanel();
 
-        var label = new JLabel("Your game code: ");
-        var codeInput = new JTextField();
-        codeInput.setSize(100, 30);
-        codeInput.setText(gameCode);
-        codeInput.setEnabled(false);
+        var label = new JLabel("Your game code: " + gameCode);
         gameCodePanel.add(label);
-        gameCodePanel.add(codeInput);
 
         var label2 = new JLabel("Waiting for an oponent to start...");
 
@@ -43,9 +46,9 @@ public class WindowRenderer extends JFrame {
         main.add(label2);
 
         add(main);
+        waitingFrameMenu = main;
 
         revalidate();
-        System.out.println("Menu changed");
     }
 
     public void displayJoinMenu() {
@@ -53,6 +56,7 @@ public class WindowRenderer extends JFrame {
         field.setSize(100, 30);
         var codeInputTextLabel = new JLabel("Game code:");
         var joinGameButton = new JButton("Join game");
+        joinGameButton.addActionListener(new JoinGameListener(manager, field));
 
         var joinGamePanel = new JPanel();
         joinGamePanel.setLayout(new GridLayout(3, 1, 10, 10));

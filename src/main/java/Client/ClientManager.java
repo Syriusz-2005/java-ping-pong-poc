@@ -6,7 +6,7 @@ import Renderer.WindowRenderer;
 import Server.GameState;
 import jakarta.websocket.Session;
 
-import java.awt.event.ActionEvent;
+import java.awt.*;
 
 public class ClientManager {
     public final ConnectionManager connectionManager;
@@ -29,7 +29,10 @@ public class ClientManager {
         System.out.print("New state: ");
         System.out.println(gameState);
         if (gameState == GameState.WAITING_IN_LOBBY) {
-            renderer.displayLobbyMenu();
+            renderer.displayWaitingMenu();
+        } else if (gameState == GameState.PREPARING) {
+            Graphics g = renderer.displayPreparingMenu();
+
         }
     }
 
@@ -39,6 +42,12 @@ public class ClientManager {
 
     public void createGame() {
         var msg = new MessageType().setCommand(CommandType.CREATE_GAME);
+        connectionManager.postMessage(msg);
+    }
+
+    public void joinGame(String gameCode) {
+        var msg = new MessageType().setCommand(CommandType.GAME_JOIN_REQUEST);
+        msg.data.gameCode = gameCode;
         connectionManager.postMessage(msg);
     }
 }

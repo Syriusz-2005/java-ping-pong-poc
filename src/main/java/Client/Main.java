@@ -34,9 +34,7 @@ public class Main {
                         clientManager.createGame();
                     }
                     case "join" -> {
-                        var msg = new MessageType().setCommand(CommandType.GAME_JOIN_REQUEST);
-                        msg.data.gameCode = arguments[1];
-                        clientManager.connectionManager.postMessage(msg);
+                        clientManager.joinGame(arguments[1]);
                     }
                     case "exit" -> {
                         try {
