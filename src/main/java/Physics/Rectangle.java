@@ -27,5 +27,6 @@ public class Rectangle extends PhysicalObject {
         height = rec.height;
         pos = new MutFVec2(rec.pos.getX(), rec.pos.getX());
         velocity = new MutFVec2(rec.velocity.getX(), rec.velocity.getX());
+        uuid = rec.uuid;
     }
 }

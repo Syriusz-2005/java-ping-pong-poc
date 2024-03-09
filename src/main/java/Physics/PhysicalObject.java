@@ -6,7 +6,7 @@ import Vector.MutFVector3;
 import java.util.UUID;
 
 public class PhysicalObject {
-    public final String uuid = UUID.randomUUID().toString();
+    public String uuid;
 
     protected MutFVec2 pos = new MutFVec2();
     protected MutFVec2 velocity = new MutFVec2();
@@ -14,6 +14,10 @@ public class PhysicalObject {
      * Mass of an object
      */
     protected float mass = .5f;
+
+    public PhysicalObject() {
+        this.uuid = UUID.randomUUID().toString();
+    }
 
     public PhysicalObject setMass(float newMass) throws OutOfBoundsException {
         if (newMass <= 0 || newMass > 1) {
@@ -39,5 +43,17 @@ public class PhysicalObject {
         pos.add(velocity.cloneVec().multiplyScalar(stepSize));
     }
 
-
+    @Override
+    public String toString() {
+        return "PhysicalObject{" +
+                "uuid='" + uuid + '\'' +
+                ", pos=" + pos +
+                ", velocity=" + velocity +
+                ", mass=" + mass +
+                ", canCollide=" + canCollide +
+                ", isImmovable=" + isImmovable +
+                ", overridesAirFriction=" + overridesAirFriction +
+                ", airFrictionOverride=" + airFrictionOverride +
+                '}';
+    }
 }

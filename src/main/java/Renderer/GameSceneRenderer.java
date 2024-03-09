@@ -1,4 +1,5 @@
 package Renderer;
+import Physics.PhysicsScene;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -16,9 +17,12 @@ public class GameSceneRenderer extends Thread {
     GLFWErrorCallback errorCallback;
     private int height = 600;
     private int width = height * 2;
+    private final PhysicsScene scene;
 
-    public GameSceneRenderer() {
+
+    public GameSceneRenderer(PhysicsScene scene) {
         super();
+        this.scene = scene;
     }
 
     private void init() {
@@ -46,7 +50,30 @@ public class GameSceneRenderer extends Thread {
     }
 
     private void render() {
+        var objects = scene.getObjects();
+        synchronized (objects) {
+            System.out.print(" " + objects.size());
 
+            glColor3f(1f, 1f, 1f);
+            for (var object : objects) {
+                var topLeft = object.getCornerPos();
+                var topRight = object.getCornerPos().cloneVec().addX(object.width);
+                var bottomLeft = object.getCornerPos().cloneVec().addY(object.height);
+                var bottomRight = object.getCornerPos().cloneVec().addY(object.height).addX(object.width);
+
+                glBegin(GL_LINE_STRIP);
+
+                glVertex2f(topLeft.getX(), topLeft.getY());
+                glVertex2f(topRight.getX(), topRight.getY());
+                glVertex2f(bottomLeft.getX(), bottomLeft.getY());
+
+                glVertex2f(topRight.getX(), topRight.getY());
+                glVertex2f(bottomLeft.getX(), bottomLeft.getY());
+                glVertex2f(bottomRight.getX(), bottomRight.getY());
+
+                glEnd();
+            }
+        }
     }
 
     private void loop() {

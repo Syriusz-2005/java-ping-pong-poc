@@ -33,17 +33,16 @@ public class PhysicsScene {
     }
 
     public void applyCorrection(Rectangle[] arr) {
-        System.out.println(Arrays.toString(arr));
-        outer: for (var rec : arr) {
-            for (var object : objects) {
-                if (rec.uuid.equals(object.uuid)) {
-                    object.updateFromRectangle(rec);
-                    continue outer;
+        synchronized (objects) {
+            outer: for (var rec : arr) {
+                for (var object : objects) {
+                    if (rec.uuid.equals(object.uuid)) {
+                        object.updateFromRectangle(rec);
+                        continue outer;
+                    }
                 }
                 // No matching object found: create new
-                Rectangle newRect = new Rectangle(0, 0);
-                newRect.updateFromRectangle(rec);
-                objects.add(newRect);
+                objects.add(rec);
             }
         }
     }

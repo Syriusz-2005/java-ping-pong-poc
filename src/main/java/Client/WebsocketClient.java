@@ -39,7 +39,6 @@ public class WebsocketClient {
                 manager.setGameState(message.data.gameStateUpdate.newState);
             }
             case SCENE_UPDATE -> {
-                System.out.println(message.data.sceneDataUpdate);
                 if (message.data.sceneDataUpdate.objects != null) {
                     var jsonArr = message.data.sceneDataUpdate.objects;
                     Rectangle[] arr = new Rectangle[jsonArr.length];

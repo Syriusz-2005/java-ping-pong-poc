@@ -12,7 +12,7 @@ public class ClientManager {
     public final SceneManager sceneManager = new SceneManager();
 
     public final WindowRenderer windowRenderer = new WindowRenderer(this);
-    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer();
+    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene);
     private GameState gameState;
     private String gameCode;
 
