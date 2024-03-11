@@ -55,12 +55,8 @@ public class GameSceneRenderer extends Thread {
         glfwShowWindow(window);
     }
 
-    private MutFVec2 convertVec(MutFVec2 vec) {
-        return vec.multiplyScalar(2f).subtractScalar(1f);
-    }
 
     private void render(ArrayList<Rectangle> objects) {
-        var viewport = new MutFVec2(GameLoop.SCENE_WIDTH, GameLoop.SCENE_HEIGHT);
 
         for (var object : objects) {
             switch (object.getName()) {
@@ -68,22 +64,16 @@ public class GameSceneRenderer extends Thread {
                 case "ceiling" -> glColor3f(0f, 0f, 1f);
                 default -> glColor3f(1f, 1f, 1f);
             }
-            var topLeft = convertVec(object.getCornerPos().divide(viewport));
-            var topRight = convertVec(object.getCornerPos().addX(object.width).divide(viewport));
-            var bottomLeft = convertVec(object.getCornerPos().addY(-object.height).divide(viewport));
-            var bottomRight = convertVec(object.getCornerPos().addY(-object.height).addX(object.width).divide(viewport));
 
-            float[] vertices = {
-                    topLeft.getX(), topLeft.getY(),
-                    topRight.getX(), topRight.getY(),
-                    bottomLeft.getX(), bottomLeft.getY(),
+            if (object.mesh == null) {
+                float[] vertices = new float[12];
+                int[] indices = {0, 1, 2, 3, 4, 5, 6};
+                object.mesh = MeshLoader.createMesh(vertices, indices, object);
+            }
 
-                    topRight.getX(), topRight.getY(),
-                    bottomLeft.getX(), bottomLeft.getY(),
-                    bottomRight.getX(), bottomRight.getY(),
-            };
-            int[] indices = {0, 1, 2, 3, 4, 5, 6};
-            var mesh = MeshLoader.createMesh(vertices, indices);
+            var mesh = object.mesh;
+
+            mesh.updateVertices();
 
             GL30.glBindVertexArray(mesh.getVaoID());
             GL20.glEnableVertexAttribArray(0);

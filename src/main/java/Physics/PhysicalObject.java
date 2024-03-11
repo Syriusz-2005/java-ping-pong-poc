@@ -1,11 +1,17 @@
 package Physics;
 
+import Renderer.Mesh;
 import Vector.MutFVec2;
 import Vector.MutFVector3;
 
 import java.util.UUID;
 
 public class PhysicalObject {
+    /**
+     * A representation of an object that can be displayed by opengl on each frame
+     */
+    public transient Mesh mesh;
+
     public String uuid;
 
     protected MutFVec2 pos = new MutFVec2();

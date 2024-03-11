@@ -8,7 +8,7 @@ public class MessageEncoder implements Encoder.Text<MessageType> {
     public static Gson gson = new Gson();
 
     @Override
-    public String encode(MessageType message) throws EncodeException {
+    public String encode(MessageType message) {
         return gson.toJson(message);
     }
 }
