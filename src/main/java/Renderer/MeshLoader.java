@@ -30,8 +30,7 @@ public class MeshLoader {
         return buffer;
     }
 
-    private static FloatBuffer storeData(int attribute, int dimensions, float[] data) {
-        int vbo = GL15.glGenBuffers();
+    private static FloatBuffer storeData(int attribute, int dimensions, float[] data, int vbo) {
         vbos.add(vbo);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
         FloatBuffer buffer = createFloatBuffer(data);
@@ -49,13 +48,16 @@ public class MeshLoader {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
     }
 
-    public static Mesh createMesh(float[] positions, int[] indices, Rectangle o) {
+    public static Mesh createMesh(Rectangle o) {
         int vao = genVAO();
+        float[] positions = new float[12];
+        int[] indices = {0, 1, 2, 3, 4, 5};
         Mesh.updateVertices(o, positions);
-        FloatBuffer verticesBuffer = storeData(0,2,positions);
-        GL30.glBindVertexArray(0);
+        int positionVbo = GL15.glGenBuffers();
+        FloatBuffer verticesBuffer = storeData(0,2, positions, positionVbo);
         bindIndices(indices);
-        return new Mesh(vao,indices.length, positions, o, verticesBuffer);
+        GL30.glBindVertexArray(0);
+        return new Mesh(vao, indices.length, positions, o, verticesBuffer, positionVbo);
     }
 
     private static int genVAO() {

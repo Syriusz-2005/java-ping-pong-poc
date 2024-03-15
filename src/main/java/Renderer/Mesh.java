@@ -1,6 +1,5 @@
 package Renderer;
 
-import Physics.PhysicalObject;
 import Physics.Rectangle;
 import Server.GameLoop;
 import Vector.MutFVec2;
@@ -10,23 +9,27 @@ import java.nio.FloatBuffer;
 public class Mesh {
 
     private final int vao;
-    private final int vertices;
+    private final int verticesCount;
     private final float[] verticesValues;
     private final Rectangle o;
-    private final FloatBuffer buffer;
+    private final FloatBuffer positionBuffer;
+    private final int positionVbo;
 
 
-    public Mesh(int vao, int vertex, float[] verticesValues, Rectangle o, FloatBuffer buffer) {
+    public Mesh(int vao, int vertex, float[] verticesValues, Rectangle o, FloatBuffer positionBuffer, int positionVbo) {
         this.vao = vao;
-        this.vertices = vertex;
+        this.verticesCount = vertex;
         this.verticesValues = verticesValues;
         this.o = o;
-        this.buffer = buffer;
+        this.positionBuffer = positionBuffer;
+        this.positionVbo = positionVbo;
     }
 
     public void updateVertices() {
         Mesh.updateVertices(o, verticesValues);
-        buffer.put(0, verticesValues);
+        positionBuffer.put(0, verticesValues);
+        positionBuffer.rewind();
+
     }
 
     public static void updateVertices(Rectangle o, float[] verticesValues) {
@@ -59,6 +62,6 @@ public class Mesh {
     }
 
     public int getVertexCount() {
-        return vertices;
+        return verticesCount;
     }
 }

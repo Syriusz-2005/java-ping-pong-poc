@@ -66,9 +66,7 @@ public class GameSceneRenderer extends Thread {
             }
 
             if (object.mesh == null) {
-                float[] vertices = new float[12];
-                int[] indices = {0, 1, 2, 3, 4, 5, 6};
-                object.mesh = MeshLoader.createMesh(vertices, indices, object);
+                object.mesh = MeshLoader.createMesh(object);
             }
 
             var mesh = object.mesh;
