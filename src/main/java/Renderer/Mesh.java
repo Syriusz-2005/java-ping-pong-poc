@@ -3,8 +3,11 @@ package Renderer;
 import Physics.Rectangle;
 import Server.GameLoop;
 import Vector.MutFVec2;
+import org.lwjgl.opengl.GL15;
 
+import java.io.*;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 public class Mesh {
 
@@ -26,13 +29,18 @@ public class Mesh {
     }
 
     public void updateVertices() {
-        Mesh.updateVertices(o, verticesValues);
-        positionBuffer.put(0, verticesValues);
-        positionBuffer.rewind();
-
+        var newValues = Mesh.updateVertices(o, verticesValues);
+        positionBuffer.clear();
+        positionBuffer.put(0, newValues);
+        positionBuffer.flip();
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.positionVbo);
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, positionBuffer);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+//        System.out.print(positionBuffer + " " + o.getName() + Arrays.toString(verticesValues));
+//        System.out.println();
     }
 
-    public static void updateVertices(Rectangle o, float[] verticesValues) {
+    public static float[] updateVertices(Rectangle o, float[] verticesValues) {
         var viewport = new MutFVec2(GameLoop.SCENE_WIDTH, GameLoop.SCENE_HEIGHT);
 
         var topLeft = convertVec(o.getCornerPos().divide(viewport));
@@ -50,7 +58,11 @@ public class Mesh {
                 bottomRight.getX(), bottomRight.getY(),
         };
 
-        System.arraycopy(vertices, 0, verticesValues, 0, vertices.length);
+        for (int i = 0; i < vertices.length; i++) {
+            verticesValues[i] = vertices[i];
+        }
+
+        return verticesValues;
     }
 
     private static MutFVec2 convertVec(MutFVec2 vec) {
