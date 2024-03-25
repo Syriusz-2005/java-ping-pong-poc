@@ -52,7 +52,7 @@ public class GameSceneRenderer extends Thread {
         height = framebufferSize.get(1);
 
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
         glfwShowWindow(window);
     }
 
