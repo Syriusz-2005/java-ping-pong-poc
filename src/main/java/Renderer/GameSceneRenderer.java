@@ -7,6 +7,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -71,12 +72,17 @@ public class GameSceneRenderer extends Thread {
 
             var mesh = object.mesh;
 
-            mesh.updateVertices();
-
             GL30.glBindVertexArray(mesh.getVaoID());
+
+            mesh.updateVertices();
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, mesh.positionVbo);
             GL20.glEnableVertexAttribArray(0);
+
             glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT,0);
+
             GL20.glDisableVertexAttribArray(0);
+            GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+
             GL30.glBindVertexArray(0);
         }
     }

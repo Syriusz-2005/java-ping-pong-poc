@@ -16,7 +16,7 @@ public class Mesh {
     private final float[] verticesValues;
     private final Rectangle o;
     private final FloatBuffer positionBuffer;
-    private final int positionVbo;
+    public final int positionVbo;
 
 
     public Mesh(int vao, int vertex, float[] verticesValues, Rectangle o, FloatBuffer positionBuffer, int positionVbo) {
@@ -30,14 +30,12 @@ public class Mesh {
 
     public void updateVertices() {
         var newValues = Mesh.updateVertices(o, verticesValues);
-        positionBuffer.clear();
-        positionBuffer.put(0, newValues);
-        positionBuffer.flip();
+        var newBuffer = MeshLoader.createFloatBuffer(newValues);
+//        positionBuffer.clear();
+//        positionBuffer.put(0, newValues);
+//        positionBuffer.flip();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.positionVbo);
-        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, positionBuffer);
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-//        System.out.print(positionBuffer + " " + o.getName() + Arrays.toString(verticesValues));
-//        System.out.println();
+        GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, newBuffer);
     }
 
     public static float[] updateVertices(Rectangle o, float[] verticesValues) {
