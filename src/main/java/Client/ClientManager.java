@@ -6,6 +6,7 @@ import Renderer.GameSceneRenderer;
 import Renderer.WindowRenderer;
 import Server.GameState;
 import jakarta.websocket.Session;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class ClientManager {
@@ -16,6 +17,7 @@ public class ClientManager {
     public final GLFWKeyCallback onKey = new GLFWKeyCallback() {
         @Override
         public void invoke(long window, int key, int scancode, int action, int mods) {
+            if (action == GLFW.GLFW_REPEAT) return;
             char c = (char) key;
             var msg = new MessageType().setCommand(CommandType.KEY_STATE_UPDATE);
             msg.data.keyState.paletteMovement = switch (c) {
@@ -23,6 +25,9 @@ public class ClientManager {
                 case 'S' -> -1;
                 default -> 0;
             };
+            if (action == GLFW.GLFW_RELEASE) {
+                msg.data.keyState.paletteMovement = 0;
+            }
             connectionManager.postMessage(msg);
         }
     };
