@@ -6,13 +6,27 @@ import Renderer.GameSceneRenderer;
 import Renderer.WindowRenderer;
 import Server.GameState;
 import jakarta.websocket.Session;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class ClientManager {
     public final ConnectionManager connectionManager;
     public final SceneManager sceneManager = new SceneManager();
 
     public final WindowRenderer windowRenderer = new WindowRenderer(this);
-    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene);
+    public final GLFWKeyCallback onKey = new GLFWKeyCallback() {
+        @Override
+        public void invoke(long window, int key, int scancode, int action, int mods) {
+            char c = (char) key;
+            var msg = new MessageType().setCommand(CommandType.KEY_STATE_UPDATE);
+            msg.data.keyState.paletteMovement = switch (c) {
+                case 'W' -> 1;
+                case 'S' -> -1;
+                default -> 0;
+            };
+            connectionManager.postMessage(msg);
+        }
+    };
+    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey);
     private GameState gameState;
     private String gameCode;
 

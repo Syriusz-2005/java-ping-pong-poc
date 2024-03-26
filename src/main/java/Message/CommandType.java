@@ -12,4 +12,6 @@ public enum CommandType {
     GAME_STATE_UPDATE,
     GAME_METADATA_UPDATE,
     SCENE_UPDATE,
+
+    KEY_STATE_UPDATE,
 }

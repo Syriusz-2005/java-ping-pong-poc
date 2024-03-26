@@ -38,6 +38,14 @@ public class Game {
         }
     }
 
+    public Player getPlayer0() {
+        return player0;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
     public void broadcastSceneState(Rectangle[] arr) {
         var msg = new MessageType().setCommand(CommandType.SCENE_UPDATE);
         msg.data.sceneDataUpdate.timestamp = System.currentTimeMillis();

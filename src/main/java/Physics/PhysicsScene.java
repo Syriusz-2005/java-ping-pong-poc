@@ -121,10 +121,10 @@ public class PhysicsScene {
             if (pairedObject.canCollide && object != pairedObject) {
                 var intersection = getIntersection(object, pairedObject);
                 if (intersection != null) {
-                    System.out.println("Collision detected!");
-                    System.out.println(object);
-                    System.out.println(pairedObject);
-                    System.out.println("\n");
+//                    System.out.println("Collision detected!");
+//                    System.out.println(object);
+//                    System.out.println(pairedObject);
+//                    System.out.println("\n");
                     calculateCollisionResult(object, pairedObject, intersection);
                 }
             }
@@ -136,6 +136,15 @@ public class PhysicsScene {
             object.step(stepLength, config);
             collisionDetect(object);
         }
+    }
+
+    public Rectangle findObject(String uuid) {
+        for (var object : objects) {
+            if (object.uuid == uuid) {
+                return object;
+            }
+        }
+        return null;
     }
 
     public void step() {

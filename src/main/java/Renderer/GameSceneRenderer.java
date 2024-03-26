@@ -1,10 +1,9 @@
 package Renderer;
 import Physics.PhysicsScene;
 import Physics.Rectangle;
-import Server.GameLoop;
-import Vector.MutFVec2;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL15;
@@ -25,11 +24,13 @@ public class GameSceneRenderer extends Thread {
     private int height = 600;
     private int width = height * 2;
     private final PhysicsScene scene;
+    private GLFWKeyCallback onKey;
 
 
-    public GameSceneRenderer(PhysicsScene scene) {
+    public GameSceneRenderer(PhysicsScene scene, GLFWKeyCallback onKey) {
         super();
         this.scene = scene;
+        this.onKey = onKey;
     }
 
     private void init() {
@@ -54,8 +55,8 @@ public class GameSceneRenderer extends Thread {
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
         glfwShowWindow(window);
-    }
 
+    }
 
     private void render(ArrayList<Rectangle> objects) {
 
@@ -114,6 +115,7 @@ public class GameSceneRenderer extends Thread {
     public void run() {
         try {
             init();
+            glfwSetKeyCallback(window, onKey);
             loop();
             glfwDestroyWindow(window);
         } finally {

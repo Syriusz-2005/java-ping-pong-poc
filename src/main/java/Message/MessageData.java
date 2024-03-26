@@ -7,4 +7,5 @@ public class MessageData {
     public GameStateUpdateMessageData gameStateUpdate = new GameStateUpdateMessageData();
     public GameMetadataUpdateMessageData gameMetadataUpdate = new GameMetadataUpdateMessageData();
     public SceneUpdateMessageData sceneDataUpdate = new SceneUpdateMessageData();
+    public KeyStateUpdateMessageData keyState = new KeyStateUpdateMessageData();
 }

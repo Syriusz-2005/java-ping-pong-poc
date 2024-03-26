@@ -87,6 +87,9 @@ public class ConnectionEndpoint {
             case GAME_JOIN_REQUEST -> {
                 ConnectionEndpoint.lobby.joinGame(user, message.data.gameCode);
             }
+            case KEY_STATE_UPDATE -> {
+                user.getPlayer().setMovement(message.data.keyState.paletteMovement);
+            }
         }
     }
 

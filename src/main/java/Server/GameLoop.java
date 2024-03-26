@@ -1,16 +1,11 @@
 package Server;
 
-import Message.CommandType;
-import Message.MessageType;
 import Physics.PhysicsScene;
-import Physics.PhysicsSceneConfig;
 import Physics.Rectangle;
 import Utils.LogLevel;
 import Utils.Logger;
 import Vector.MutFVec2;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class GameLoop extends Thread {
     public static float SCENE_WIDTH = 1600;
@@ -34,6 +29,10 @@ public class GameLoop extends Thread {
         this.config = config;
     }
 
+    public PhysicsScene getScene() {
+        return scene;
+    }
+
     public void dispose() {
         scene.removeAll();
     }
@@ -51,6 +50,9 @@ public class GameLoop extends Thread {
         var player1Palette = new Rectangle(30, 120, "player1");
         player1Palette.isImmovable = true;
         player1Palette.setPos(new MutFVec2(sceneWidth - 20, sceneHeight / 2));
+
+        game.getPlayer0().sceneObjectUUID = player0Palette.uuid;
+        game.getPlayer1().sceneObjectUUID = player1Palette.uuid;
 
         scene.add(player0Palette);
         scene.add(player1Palette);
