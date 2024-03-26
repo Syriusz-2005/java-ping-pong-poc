@@ -31,7 +31,7 @@ public class ClientManager {
             connectionManager.postMessage(msg);
         }
     };
-    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey);
+    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey, sceneManager);
     private GameState gameState;
     private String gameCode;
 

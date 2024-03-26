@@ -140,7 +140,7 @@ public class PhysicsScene {
 
     public Rectangle findObject(String uuid) {
         for (var object : objects) {
-            if (object.uuid == uuid) {
+            if (object.uuid.equals(uuid)) {
                 return object;
             }
         }

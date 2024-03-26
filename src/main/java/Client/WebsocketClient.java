@@ -35,6 +35,9 @@ public class WebsocketClient {
             case GAME_KICK -> {
                 Logger.printErr("You've been kicked, reason: " + message.data.gameKick.reason);
             }
+            case GAME_METADATA_UPDATE -> {
+                manager.sceneManager.setSimulationStepsPerSecond(message.data.gameMetadataUpdate.simulationStepsPerSecond);
+            }
             case GAME_STATE_UPDATE -> {
                 manager.setGameState(message.data.gameStateUpdate.newState);
             }

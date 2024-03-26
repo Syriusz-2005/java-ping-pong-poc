@@ -1,4 +1,5 @@
 package Renderer;
+import Client.SceneManager;
 import Physics.PhysicsScene;
 import Physics.Rectangle;
 import org.lwjgl.BufferUtils;
@@ -25,12 +26,14 @@ public class GameSceneRenderer extends Thread {
     private int width = height * 2;
     private final PhysicsScene scene;
     private GLFWKeyCallback onKey;
+    private final SceneManager sceneManager;
 
 
-    public GameSceneRenderer(PhysicsScene scene, GLFWKeyCallback onKey) {
+    public GameSceneRenderer(PhysicsScene scene, GLFWKeyCallback onKey, SceneManager manager) {
         super();
         this.scene = scene;
         this.onKey = onKey;
+        this.sceneManager = manager;
     }
 
     private void init() {
@@ -94,20 +97,22 @@ public class GameSceneRenderer extends Thread {
         glClearColor(0f, 0f, 0f, 1f);
         glLineWidth(2.8f);
         while (!glfwWindowShouldClose(window)) {
+            var before = System.currentTimeMillis();
             var objects = scene.getObjects();
 
             glViewport(0, 0, width, height);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            var before = System.currentTimeMillis();
             render(objects);
-            var now = System.currentTimeMillis();
-            var delta = now - before;
 //            System.out.println("Frame time: " + delta + "ms");
 
             glfwSwapBuffers(window);
             glfwPollEvents();
-
+            var now = System.currentTimeMillis();
+            var delta = now - before;
+            var stepsPerSec = (float) sceneManager.getSimulationStepsPerSecond();
+            var stepLength = (1000 / stepsPerSec);
+            scene.step((100f / stepsPerSec) / delta * 10.6f);
         }
     }
 
