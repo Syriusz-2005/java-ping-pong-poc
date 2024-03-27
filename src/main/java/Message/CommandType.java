@@ -4,6 +4,7 @@ public enum CommandType {
     TEST_CONNECTION,
     GAME_JOIN_REQUEST,
     CREATE_GAME,
+    KEY_STATE_UPDATE,
 
 
     GAME_JOIN,
@@ -13,5 +14,4 @@ public enum CommandType {
     GAME_METADATA_UPDATE,
     SCENE_UPDATE,
 
-    KEY_STATE_UPDATE,
 }
