@@ -1,8 +1,6 @@
 package Renderer;
 import Physics.PhysicsScene;
 import Physics.Rectangle;
-import Server.GameLoop;
-import Vector.MutFVec2;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -52,7 +50,7 @@ public class GameSceneRenderer extends Thread {
         height = framebufferSize.get(1);
 
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
         glfwShowWindow(window);
     }
 
@@ -97,6 +95,7 @@ public class GameSceneRenderer extends Thread {
 
             glViewport(0, 0, width, height);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
 
             var before = System.currentTimeMillis();
             render(objects);
