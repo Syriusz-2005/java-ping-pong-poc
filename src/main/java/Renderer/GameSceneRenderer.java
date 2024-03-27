@@ -112,8 +112,8 @@ public class GameSceneRenderer extends Thread {
             var now = System.currentTimeMillis();
             var delta = now - before;
             var stepsPerSec = (float) sceneManager.getSimulationStepsPerSecond();
-            var stepLength = (1000 / stepsPerSec);
-            scene.step((100f / stepsPerSec) / delta * 10.6f);
+            var defaultSleepTime = 1000f / stepsPerSec;
+            scene.step((100f / stepsPerSec) * (delta / defaultSleepTime));
         }
     }
 
