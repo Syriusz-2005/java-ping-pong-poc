@@ -15,7 +15,7 @@ public class Mesh {
     private final int verticesCount;
     private final float[] verticesValues;
     private final Rectangle o;
-    private final FloatBuffer positionBuffer;
+    private FloatBuffer positionBuffer;
     public final int positionVbo;
 
 
@@ -34,6 +34,7 @@ public class Mesh {
 //        positionBuffer.clear();
 //        positionBuffer.put(0, newValues);
 //        positionBuffer.flip();
+        this.positionBuffer = newBuffer;
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, this.positionVbo);
         GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, newBuffer);
     }

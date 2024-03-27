@@ -30,7 +30,7 @@ public class Rectangle extends PhysicalObject {
         width = rec.width;
         height = rec.height;
         pos = new MutFVec2(rec.pos.getX(), rec.pos.getY());
-        velocity = new MutFVec2(rec.velocity.getX(), rec.velocity.getX());
+        velocity = new MutFVec2(rec.velocity.getX(), rec.velocity.getY());
         uuid = rec.uuid;
     }
 }

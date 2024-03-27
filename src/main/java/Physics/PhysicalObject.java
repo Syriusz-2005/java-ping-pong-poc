@@ -54,7 +54,7 @@ public class PhysicalObject {
     }
 
     public void setVelocity(MutFVec2 velocity) {
-        this.velocity = velocity;
+        this.velocity.clone(velocity);
     }
 
     public MutFVec2 getVelocity() {

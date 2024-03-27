@@ -19,16 +19,25 @@ public class Game {
     public String gameCode;
 
     public AtomicBoolean isDisposed = new AtomicBoolean(false);
-
     private Player player0;
     private Player player1;
 
-    private final GameLoop gameLoop = new GameLoop(this, new GameLoopConfig(40, 2, 40 * 6));
+    private GameLoopConfig config = new GameLoopConfig(
+            40,
+            2,
+            40 * 6
+    );
+
+    private final GameLoop gameLoop = new GameLoop(
+        this,
+        config
+    );
 
     public Game(String gameCode) {
         this.gameCode = gameCode;
         gameLoop.start();
     }
+
     private void broadcast(MessageType msg) {
         if (player0 != null) {
             player0.postMessage(msg);
@@ -36,6 +45,14 @@ public class Game {
         if (player1 != null) {
             player1.postMessage(msg);
         }
+    }
+
+    public Player getPlayer0() {
+        return player0;
+    }
+
+    public Player getPlayer1() {
+        return player1;
     }
 
     public void broadcastSceneState(Rectangle[] arr) {
@@ -52,6 +69,7 @@ public class Game {
     public void broadcastMetadata() {
         var msg1 = new MessageType().setCommand(CommandType.GAME_METADATA_UPDATE);
         msg1.data.gameMetadataUpdate.yourUUID = player0.sceneObjectUUID;
+        msg1.data.gameMetadataUpdate.simulationStepsPerSecond = config.simulationStepsPerSecond();
         if (player1 != null) {
             msg1.data.gameMetadataUpdate.enemyUsername = player1.getUser().getUsername();
         }
@@ -60,6 +78,7 @@ public class Game {
         if (player1 != null) {
             var msg2 = new MessageType().setCommand(CommandType.GAME_METADATA_UPDATE);
             msg2.data.gameMetadataUpdate.yourUUID = player1.sceneObjectUUID;
+            msg2.data.gameMetadataUpdate.simulationStepsPerSecond = config.simulationStepsPerSecond();
             msg2.data.gameMetadataUpdate.enemyUsername = player0.getUser().getUsername();
             player1.postMessage(msg2);
         }
@@ -95,6 +114,7 @@ public class Game {
 
     /**
      * Automatically calls game.dispose() if necessary
+     *
      * @param p
      * @return boolean indicating if the lobby must remove the game from the list
      */
@@ -114,7 +134,6 @@ public class Game {
     /**
      * Disposes the game state and informs players that the game is being closed
      * This method must be invoked before closing the game to free up resources!
-     *
      */
     public void dispose() {
         isDisposed.set(true);

@@ -137,6 +137,12 @@ public class MutFVec2 implements Vector<Float> {
         return this;
     }
 
+    public MutFVec2 clone(MutFVec2 vec) {
+        x = vec.x;
+        y = vec.y;
+        return this;
+    }
+
     @Override
     public MutFVec2 cloneVec() {
         return new MutFVec2(this);
