@@ -102,6 +102,7 @@ public class GameSceneRenderer extends Thread {
 
             glViewport(0, 0, width, height);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
 
             render(objects);
 //            System.out.println("Frame time: " + delta + "ms");
@@ -111,8 +112,8 @@ public class GameSceneRenderer extends Thread {
             var now = System.currentTimeMillis();
             var delta = now - before;
             var stepsPerSec = (float) sceneManager.getSimulationStepsPerSecond();
-            var stepLength = (1000 / stepsPerSec);
-            scene.step((100f / stepsPerSec) / delta * 10.6f);
+            var defaultSleepTime = 1000f / stepsPerSec;
+            scene.step((100f / stepsPerSec) * (delta / defaultSleepTime));
         }
     }
 
