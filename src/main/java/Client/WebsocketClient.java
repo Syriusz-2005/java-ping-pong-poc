@@ -52,6 +52,10 @@ public class WebsocketClient {
                     manager.sceneManager.scene.applyCorrection(arr);
                 }
             }
+            case GAME_END_SUMMARY -> {
+                var data = message.data.gameEndSummary;
+                System.out.println(data.isWin ? "You won!" : "You lost!");
+            }
         }
     }
 

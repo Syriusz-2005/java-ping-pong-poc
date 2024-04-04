@@ -20,6 +20,7 @@ public class GameLoop extends Thread {
 
     private Rectangle ceiling;
     private Rectangle player0Palette;
+    private Rectangle player1Palette;
     private Rectangle ball;
 
 
@@ -47,7 +48,7 @@ public class GameLoop extends Thread {
         player0Palette.isImmovable = true;
         player0Palette.setPos(new MutFVec2(20, sceneHeight / 2));
 
-        var player1Palette = new Rectangle(30, 120, "player1");
+        player1Palette = new Rectangle(30, 120, "player1");
         player1Palette.isImmovable = true;
         player1Palette.setPos(new MutFVec2(sceneWidth - 20, sceneHeight / 2));
 
@@ -91,6 +92,16 @@ public class GameLoop extends Thread {
         game.broadcastSceneState(arr);
     }
 
+    private Player findWinningPlayer() {
+        if (ball.getPos().getX() < player0Palette.getPos().getX()) {
+            return game.getPlayer1();
+        }
+        if (ball.getPos().getX() > player1Palette.getPos().getX()) {
+            return game.getPlayer0();
+        }
+        return null;
+    }
+
     private void processStep() {
         stepIndex++;
         var gameState = game.getState();
@@ -110,6 +121,11 @@ public class GameLoop extends Thread {
         if (gameState == GameState.PREPARING || gameState == GameState.SIMULATING) {
             float stepLength = 100f / config.simulationStepsPerSecond();
             scene.step(stepLength);
+            var winningPlayer = findWinningPlayer();
+
+            if (winningPlayer != null) {
+                game.setWin(winningPlayer);
+            }
 
             // Reducing the amount of update packets during preparation stage
             var simulationStepsToPacketSend = (config.simulationStepsToPacketsRatio()) + (gameState == GameState.PREPARING ? 10 : 0);

@@ -38,6 +38,11 @@ public class Game {
         gameLoop.start();
     }
 
+    public Player getOponent(Player p) {
+        if (p == player0) return player1;
+        return player0;
+    }
+
     private void broadcast(MessageType msg) {
         if (player0 != null) {
             player0.postMessage(msg);
@@ -53,6 +58,12 @@ public class Game {
 
     public Player getPlayer1() {
         return player1;
+    }
+
+    public void setWin(Player winningPlayer) {
+        winningPlayer.setWinner(true);
+        getOponent(winningPlayer).setWinner(false);
+        setState(GameState.ENDED);
     }
 
     public void broadcastSceneState(Rectangle[] arr) {
