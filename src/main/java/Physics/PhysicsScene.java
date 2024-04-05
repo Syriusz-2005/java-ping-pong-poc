@@ -5,6 +5,7 @@ import Vector.MutFVector3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * Basic AABB Collision detection and physics engine
@@ -121,10 +122,6 @@ public class PhysicsScene {
             if (pairedObject.canCollide && object != pairedObject) {
                 var intersection = getIntersection(object, pairedObject);
                 if (intersection != null) {
-//                    System.out.println("Collision detected!");
-//                    System.out.println(object);
-//                    System.out.println(pairedObject);
-//                    System.out.println("\n");
                     calculateCollisionResult(object, pairedObject, intersection);
                 }
             }
@@ -141,6 +138,15 @@ public class PhysicsScene {
     public Rectangle findObject(String uuid) {
         for (var object : objects) {
             if (object.uuid.equals(uuid)) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public Rectangle findObject(Predicate<Rectangle> p) {
+        for (var object : objects) {
+            if (p.test(object)) {
                 return object;
             }
         }

@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 public class ClientManager {
     public final ConnectionManager connectionManager;
     public final SceneManager sceneManager = new SceneManager();
+    public final AutoPilot autoPilot = new AutoPilot(sceneManager);
 
     public final WindowRenderer windowRenderer = new WindowRenderer(this);
     public final GLFWKeyCallback onKey = new GLFWKeyCallback() {

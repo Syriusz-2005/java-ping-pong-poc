@@ -30,6 +30,9 @@ public class Main {
             interpreter.listen((arguments) -> {
                 var cmd = arguments[0];
                 switch (cmd) {
+                    case "autopilot" -> {
+
+                    }
                     case "create" -> {
                         clientManager.createGame();
                     }
