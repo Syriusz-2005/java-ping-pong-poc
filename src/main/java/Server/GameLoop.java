@@ -4,6 +4,8 @@ import Physics.PhysicsScene;
 import Physics.Rectangle;
 import Utils.LogLevel;
 import Utils.Logger;
+import Utils.Random;
+import Utils.RandomCode;
 import Vector.MutFVec2;
 
 
@@ -78,7 +80,7 @@ public class GameLoop extends Thread {
      * Run when the game enters simulation stage.
      */
     private void initializeSimulation() {
-        ball.getVelocity().setX(4);
+        ball.getVelocity().setX(4).setY(Random.random(-1, 1));
     }
 
     private void processLazyStep() {
