@@ -8,6 +8,7 @@ public class WindowRenderer extends JFrame {
     private final ClientManager manager;
     private JPanel lobbyFrame;
     private JPanel waitingFrameMenu;
+    private JPanel gameEndMenu;
 
     public WindowRenderer(ClientManager manager) {
         super("Ping Pong lobby");
@@ -45,6 +46,22 @@ public class WindowRenderer extends JFrame {
 
         add(main);
         waitingFrameMenu = main;
+
+        revalidate();
+    }
+
+    public void displayGameEndMenu(boolean isWinner) {
+        var parent = new JPanel();
+
+        var label = new JLabel("Game ended!");
+
+        var label2 = new JLabel(isWinner ? "You won!" : "You lost...");
+
+        parent.add(label);
+        parent.add(label2);
+
+        add(parent);
+        gameEndMenu = parent;
 
         revalidate();
     }

@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL30;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -27,6 +28,7 @@ public class GameSceneRenderer extends Thread {
     private final PhysicsScene scene;
     private GLFWKeyCallback onKey;
     private final SceneManager sceneManager;
+    public volatile AtomicBoolean shouldTerminate = new AtomicBoolean(false);
 
 
     public GameSceneRenderer(PhysicsScene scene, GLFWKeyCallback onKey, SceneManager manager) {
@@ -96,7 +98,7 @@ public class GameSceneRenderer extends Thread {
 
         glClearColor(0f, 0f, 0f, 1f);
         glLineWidth(2.8f);
-        while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window) && !shouldTerminate.get()) {
             var before = System.currentTimeMillis();
             var objects = scene.getObjects();
 
