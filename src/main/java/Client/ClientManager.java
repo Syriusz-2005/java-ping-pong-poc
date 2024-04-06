@@ -11,8 +11,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class ClientManager {
     public final ConnectionManager connectionManager;
-    public final SceneManager sceneManager = new SceneManager();
-    public final AutoPilot autoPilot = new AutoPilot(sceneManager);
+    public final SceneManager sceneManager;
 
     public final WindowRenderer windowRenderer = new WindowRenderer(this);
     public final GLFWKeyCallback onKey = new GLFWKeyCallback() {
@@ -32,7 +31,7 @@ public class ClientManager {
             connectionManager.postMessage(msg);
         }
     };
-    public final GameSceneRenderer sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey, sceneManager);
+    public final GameSceneRenderer sceneRenderer;
     private GameState gameState;
     private String gameCode;
 
@@ -58,6 +57,8 @@ public class ClientManager {
 
     public ClientManager(Session session) {
         this.connectionManager = new ConnectionManager(session);
+        this.sceneManager = new SceneManager(this);
+        this.sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey, sceneManager);
     }
 
     public void createGame() {

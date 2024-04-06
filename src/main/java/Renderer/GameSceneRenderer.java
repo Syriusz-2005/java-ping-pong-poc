@@ -64,7 +64,7 @@ public class GameSceneRenderer extends Thread {
     }
 
     private void render(ArrayList<Rectangle> objects) {
-
+        sceneManager.autoPilot.step();
         for (var object : objects) {
             switch (object.getName()) {
                 case "player0" -> glColor3f(1f, 1f, 0f);

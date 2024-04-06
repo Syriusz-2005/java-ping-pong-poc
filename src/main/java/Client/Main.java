@@ -3,6 +3,7 @@ package Client;
 import Message.CommandType;
 import Message.MessageType;
 import Utils.CommandInterpreter;
+import Utils.Logger;
 import jakarta.websocket.*;
 
 import java.io.IOException;
@@ -31,7 +32,8 @@ public class Main {
                 var cmd = arguments[0];
                 switch (cmd) {
                     case "autopilot" -> {
-
+                        clientManager.sceneManager.autoPilot.isEnabled = true;
+                        Logger.printOk("Mode is set to: autopilot");
                     }
                     case "create" -> {
                         clientManager.createGame();
