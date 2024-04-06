@@ -31,7 +31,7 @@ public class ClientManager {
             connectionManager.postMessage(msg);
         }
     };
-    public final GameSceneRenderer sceneRenderer;
+    public GameSceneRenderer sceneRenderer;
     private GameState gameState;
     private String gameCode;
 
@@ -51,14 +51,19 @@ public class ClientManager {
             windowRenderer.displayWaitingMenu();
         } else if (gameState == GameState.PREPARING) {
             windowRenderer.displayPreparingMenu();
-            sceneRenderer.start();
+            sceneRenderer.showWindow();
         }
     }
 
     public ClientManager(Session session) {
         this.connectionManager = new ConnectionManager(session);
         this.sceneManager = new SceneManager(this);
-        this.sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey, sceneManager);
+        createNewRenderer();
+    }
+
+    private void createNewRenderer() {
+        sceneRenderer = new GameSceneRenderer(this.sceneManager.scene, onKey, sceneManager);
+        sceneRenderer.start();
     }
 
     public void createGame() {

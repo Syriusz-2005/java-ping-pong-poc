@@ -38,12 +38,7 @@ public class ConnectionEndpoint {
     private void close(InvalidDataException err) throws IOException {
         users.remove(this.session.getId());
         connectionEndpoints.remove(this);
-        session.close(new CloseReason(new CloseReason.CloseCode() {
-            @Override
-            public int getCode() {
-                return 400;
-            }
-        }, err.getMessage()));
+        session.close(new CloseReason(() -> 400, err.getMessage()));
     }
 
     @OnOpen
@@ -90,6 +85,11 @@ public class ConnectionEndpoint {
             case KEY_STATE_UPDATE -> {
                 user.getPlayer().setMovement(message.data.keyState.paletteMovement);
             }
+            case LEAVE_GAME -> {
+                var player = user.getPlayer();
+                if (player == null) return;
+                player.getGame().removePlayer(player);
+            }
         }
     }
 
@@ -97,6 +97,7 @@ public class ConnectionEndpoint {
     public void onClose(Session session) throws IOException {
         var user = users.get(session.getId());
         lobby.removeClosedConnection(user);
+        users.remove(session.getId());
         connectionEndpoints.remove(this);
     }
 

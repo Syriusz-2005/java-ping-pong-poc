@@ -20,9 +20,9 @@ public class AutoPilot {
         if (i % 10 != 0) return;
 
         var ball = sceneManager.getBall();
-        if (ball == null) return;
-
         var palette = sceneManager.getPalette();
+
+        if (ball == null || palette == null) return;
 
         var msg = new MessageType().setCommand(CommandType.KEY_STATE_UPDATE);
         if (palette.getPos().getY() > ball.getPos().getY()) {

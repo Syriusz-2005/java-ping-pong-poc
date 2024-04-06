@@ -5,6 +5,7 @@ public enum CommandType {
     GAME_JOIN_REQUEST,
     CREATE_GAME,
     KEY_STATE_UPDATE,
+    LEAVE_GAME,
 
 
     GAME_JOIN,

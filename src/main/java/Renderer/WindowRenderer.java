@@ -58,9 +58,12 @@ public class WindowRenderer extends JFrame {
         var label = new JLabel("Game ended!");
 
         var label2 = new JLabel(isWinner ? "You won!" : "You lost...");
+        var returnToLobbyButton = new Button("Play again");
+        returnToLobbyButton.addActionListener(new LeaveGameListener(manager, this));
 
         parent.add(label);
         parent.add(label2);
+        parent.add(returnToLobbyButton);
 
         add(parent);
         gameEndMenu = parent;
@@ -70,6 +73,9 @@ public class WindowRenderer extends JFrame {
 
     public void displayJoinMenu() {
         // Why can't I just make ui in html/css??
+        if (gameEndMenu != null) {
+            gameEndMenu.setVisible(false);
+        }
         var codeField = new TextField("Enter game code:");
         var joinGameButton = new Button("Join game");
         joinGameButton.addActionListener(new JoinGameListener(manager, codeField.getField()));

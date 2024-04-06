@@ -14,11 +14,6 @@ public class CreateGameListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                manager.createGame();
-            }
-        });
+        SwingUtilities.invokeLater(() -> manager.createGame());
     }
 }

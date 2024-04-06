@@ -59,8 +59,6 @@ public class GameSceneRenderer extends Thread {
 
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
-        glfwShowWindow(window);
-
     }
 
     private void render(ArrayList<Rectangle> objects) {
@@ -98,7 +96,7 @@ public class GameSceneRenderer extends Thread {
 
         glClearColor(0f, 0f, 0f, 1f);
         glLineWidth(2.8f);
-        while (!glfwWindowShouldClose(window) && !shouldTerminate.get()) {
+        while (!glfwWindowShouldClose(window)) {
             var before = System.currentTimeMillis();
             var objects = scene.getObjects();
 
@@ -117,6 +115,14 @@ public class GameSceneRenderer extends Thread {
             var defaultSleepTime = 1000f / stepsPerSec;
             scene.step((100f / stepsPerSec) * (delta / defaultSleepTime));
         }
+    }
+
+    public void hideWindow() {
+        glfwHideWindow(window);
+    }
+
+    public void showWindow() {
+        glfwShowWindow(window);
     }
 
     @Override

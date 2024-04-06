@@ -57,7 +57,7 @@ public class WebsocketClient {
             case GAME_END_SUMMARY -> {
                 var data = message.data.gameEndSummary;
                 System.out.println(data.isWin ? "You won!" : "You lost!");
-                manager.sceneRenderer.shouldTerminate.set(true);
+                manager.sceneRenderer.hideWindow();
                 manager.windowRenderer.displayGameEndMenu(data.isWin);
             }
         }
