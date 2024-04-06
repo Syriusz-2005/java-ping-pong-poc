@@ -1,4 +1,5 @@
 plugins {
+    id("com.github.johnrengelman.shadow").version("8.1.1")
     id("java")
 }
 
@@ -54,5 +55,13 @@ sourceSets {
         resources {
             setSrcDirs(listOf("src/main/resources"))
         }
+    }
+}
+
+tasks.jar {
+    manifest {
+        attributes(mapOf(
+                "Main-Class" to "Server.Main"
+        ))
     }
 }
