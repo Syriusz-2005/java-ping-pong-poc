@@ -2,6 +2,7 @@ package Renderer;
 import Client.ClientManager;
 
 import javax.swing.*;
+import javax.swing.text.html.StyleSheet;
 import java.awt.*;
 
 public class WindowRenderer extends JFrame {
@@ -19,6 +20,7 @@ public class WindowRenderer extends JFrame {
         setLayout(new FlowLayout());
         float size = 600;
         setSize((int) size * 2, (int) size);
+
     }
 
     public void displayPreparingMenu() {
@@ -67,19 +69,27 @@ public class WindowRenderer extends JFrame {
     }
 
     public void displayJoinMenu() {
-        var field = new JTextField();
-        field.setSize(100, 30);
-        var codeInputTextLabel = new JLabel("Game code:");
-        var joinGameButton = new JButton("Join game");
-        joinGameButton.addActionListener(new JoinGameListener(manager, field));
+        // Why can't I just make ui in html/css??
+        var codeField = new TextField("Enter game code:");
+        var joinGameButton = new Button("Join game");
+        joinGameButton.addActionListener(new JoinGameListener(manager, codeField.getField()));
 
         var joinGamePanel = new JPanel();
-        joinGamePanel.setLayout(new GridLayout(3, 1, 10, 10));
-        joinGamePanel.add(codeInputTextLabel);
-        joinGamePanel.add(field);
-        joinGamePanel.add(joinGameButton);
+        var layout = new GridBagLayout();
 
-        var createGameButton = new JButton("Create new game");
+        var constraints = new GridBagConstraints();
+
+        joinGamePanel.setLayout(layout);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        joinGamePanel.add(codeField, constraints);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        joinGamePanel.add(joinGameButton, constraints);
+
+        var createGameButton = new Button("Create new game");
         createGameButton.addActionListener(new CreateGameListener(manager));
 
         JPanel parentPanel = new JPanel();
