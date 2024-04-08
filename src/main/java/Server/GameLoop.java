@@ -80,7 +80,11 @@ public class GameLoop extends Thread {
      * Run when the game enters simulation stage.
      */
     private void initializeSimulation() {
-        ball.getVelocity().setX(2.6f).setY(Random.random(-2.3f, 2.3f));
+        var bounds = new float[][]{
+                {-2.3f, -1.5f},
+                {1.5f, 2.3f}
+        };
+        ball.getVelocity().setX(2.6f).setY(Random.random(bounds));
     }
 
     private void processLazyStep() {
