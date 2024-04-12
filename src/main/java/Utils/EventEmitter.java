@@ -3,17 +3,22 @@ package Utils;
 import java.util.ArrayList;
 
 public class EventEmitter<T> {
-    private final ArrayList<Listener<T>> listeners = new ArrayList<>();
-    private final ArrayList<Listener<T>> onceListeners = new ArrayList<>();
+    private transient final ArrayList<Listener<T>> listeners = new ArrayList<>();
+    private transient final ArrayList<Listener<T>> onceListeners = new ArrayList<>();
 
 
     protected void emit(T event) {
-        for (var listener : listeners) {
-            listener.handle(event);
+        if (listeners != null) {
+            for (var listener : listeners) {
+                listener.handle(event);
+            }
         }
-        for (var listener : onceListeners) {
-            listener.handle(event);
-            onceListeners.remove(listener);
+
+        if (onceListeners != null) {
+            for (var listener : onceListeners) {
+                listener.handle(event);
+                onceListeners.remove(listener);
+            }
         }
     }
 

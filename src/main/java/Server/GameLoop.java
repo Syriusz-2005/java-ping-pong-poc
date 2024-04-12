@@ -119,7 +119,7 @@ public class GameLoop extends Thread {
     }
 
     private void processSimulatingStep() {
-        ball.getVelocity();
+
     }
 
     private void processStep() {
