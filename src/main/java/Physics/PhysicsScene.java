@@ -123,6 +123,8 @@ public class PhysicsScene {
                 var intersection = getIntersection(object, pairedObject);
                 if (intersection != null) {
                     calculateCollisionResult(object, pairedObject, intersection);
+                    object.emitCollisionEvent();
+                    pairedObject.emitCollisionEvent();
                 }
             }
         }

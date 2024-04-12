@@ -111,6 +111,18 @@ public class MutFVec2 implements Vector<Float> {
         return this;
     }
 
+    public MutFVec2 divideScalar(float f) {
+        x /= f;
+        y /= f;
+        return this;
+    }
+
+    public MutFVec2 normalise() {
+        float l = length();
+        divideScalar(l);
+        return this;
+    }
+
     public MutFVec2 subtractLength(float value) {
         x = x > 0 ? x - value : x + value;
         y = y > 0 ? y - value : y + value;

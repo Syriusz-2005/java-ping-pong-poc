@@ -1,12 +1,14 @@
 package Physics;
 
 import Renderer.Mesh;
+import Utils.EventEmitter;
+import Utils.Listener;
 import Vector.MutFVec2;
 import Vector.MutFVector3;
 
 import java.util.UUID;
 
-public class PhysicalObject {
+public class PhysicalObject extends EventEmitter<PhysicalObject> {
     /**
      * A representation of an object that can be displayed by opengl on each frame
      */
@@ -23,6 +25,7 @@ public class PhysicalObject {
     private String name;
 
     public PhysicalObject(String name) {
+        super();
         this.uuid = UUID.randomUUID().toString();
         this.name = name;
     }
@@ -40,6 +43,9 @@ public class PhysicalObject {
     public boolean overridesAirFriction = false;
     public float airFrictionOverride;
 
+    public void emitCollisionEvent() {
+        emit(this);
+    }
 
     public void setPos(MutFVec2 pos) {
         this.pos = pos;
@@ -55,6 +61,11 @@ public class PhysicalObject {
 
     public void setVelocity(MutFVec2 velocity) {
         this.velocity.clone(velocity);
+    }
+
+    public void addVelocity(float f) {
+        MutFVec2 d = velocity.cloneVec().normalise().multiplyScalar(f);
+        velocity.add(d);
     }
 
     public MutFVec2 getVelocity() {

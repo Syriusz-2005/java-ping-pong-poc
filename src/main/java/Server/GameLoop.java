@@ -1,11 +1,11 @@
 package Server;
 
+import Physics.PhysicalObject;
 import Physics.PhysicsScene;
 import Physics.Rectangle;
 import Utils.LogLevel;
 import Utils.Logger;
 import Utils.Random;
-import Utils.RandomCode;
 import Vector.MutFVec2;
 
 
@@ -24,6 +24,7 @@ public class GameLoop extends Thread {
     private Rectangle player0Palette;
     private Rectangle player1Palette;
     private Rectangle ball;
+    private int accelerationIndex = 1;
 
 
     public GameLoop(Game game, GameLoopConfig config) {
@@ -85,6 +86,15 @@ public class GameLoop extends Thread {
                 {1.5f, 2.3f}
         };
         ball.getVelocity().setX(2.6f).setY(Random.random(bounds));
+        ball.on((PhysicalObject b) -> {
+            System.out.println("Adding velocity");
+            b.addVelocity(.4f);
+        });
+    }
+
+    private float accelerate() {
+        accelerationIndex++;
+        return 200f / ((float) Math.pow(accelerationIndex, 2) + 8000f);
     }
 
     private void processLazyStep() {
@@ -106,6 +116,10 @@ public class GameLoop extends Thread {
             return game.getPlayer0();
         }
         return null;
+    }
+
+    private void processSimulatingStep() {
+        ball.getVelocity();
     }
 
     private void processStep() {
@@ -132,6 +146,8 @@ public class GameLoop extends Thread {
             if (winningPlayer != null) {
                 game.setWin(winningPlayer);
             }
+
+            if (gameState == GameState.SIMULATING) processSimulatingStep();
 
             // Reducing the amount of update packets during preparation stage
             var simulationStepsToPacketSend = (config.simulationStepsToPacketsRatio()) + (gameState == GameState.PREPARING ? 10 : 0);
